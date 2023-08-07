@@ -8,7 +8,6 @@
 #include <utility>
 #include <type_traits>
 #include <cmath>
-//#include "IQmathCPP.h"
 
 //#define USE_INFO
 

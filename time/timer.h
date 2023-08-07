@@ -1,4 +1,4 @@
-    #ifndef TIMER_H
+#ifndef TIMER_H
 #define TIMER_H
 
 #ifdef __cplusplus
