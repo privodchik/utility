@@ -8,7 +8,6 @@
 #include <utility>
 #include <type_traits>
 #include <cmath>
-#include "IQmathCPP.h"
 
 //#define USE_INFO
 
@@ -659,9 +658,9 @@ class RMS final: public TFBase<T>{
         return std::sqrt(v);
     }
     
-    /*constexpr*/ decltype(auto) sqrt_helper(iqCpp::iq v){
-        return (iqCpp::CPP_IQsqrt(v));
-    }
+    ///*constexpr*/ decltype(auto) sqrt_helper(iqCpp::iq v){
+    //    return (iqCpp::CPP_IQsqrt(v));
+    //}
     
   public:
     
