@@ -300,6 +300,100 @@ class Integrator final: public TFBase<T>{
 //template <typename T> Integrator(T&&, T&&, T&&, T&&) -> Integrator<T>;
 
 
+//--------------------------------------- Trapezoidal Integrator -----------------------------------------------
+template<class T>
+class TrapezIntegrator final: public TFBase<T>{
+    T m_xk_1;
+    T m_TsDivTi;
+    
+  public:
+
+    constexpr TrapezIntegrator(){
+        #ifdef USE_INFO
+        std::cout << "TrapezIntegrator Ctor" << std::endl;
+        #endif         
+    }
+    constexpr TrapezIntegrator(T Ts, T Ti, T satPos, T satNeg ) : 
+            m_xk_1(T{0}),
+            TFBase<T>(std::move(Ts), std::move(satPos), std::move(satNeg)){ 
+        config(std::move(Ti);
+        #ifdef USE_INFO
+        std::cout << "TrapezIntegrator Ctor" << std::endl;
+        #endif          
+    }
+
+    TrapezIntegrator(const TrapezIntegrator& value) : 
+                    TFBase<T>(*static_cast<const TFBase<T>*>(&value)), 
+                    m_TsDivTi(value.m_TsDivTi),
+                    m_xk_1(value.m_xk_1)
+    {
+        #ifdef USE_INFO
+        std::cout << "TrapezIntegrator Copy ctor" << std::endl;
+        #endif          
+    }
+
+    TrapezIntegrator(TrapezIntegrator&& value) : 
+                    TFBase<T>(std::move(*static_cast<TFBase<T>*>(&value))), 
+                    m_TsDivTi(std::move(value.m_TsDivTi)),
+                    m_xk_1(std::move(value.m_xk_1))
+    {
+        #ifdef USE_INFO
+        std::cout << "Integrator Move ctor" << std::endl;
+        #endif         
+    }
+
+    TrapezIntegrator& operator=(const TrapezIntegrator& value){
+        if (this != &value){
+            *static_cast<TFBase<T>*>(this) = *static_cast<const TFBase<T>*>(&value);
+            m_TsDivTi = value.m_TsDivTi;
+            m_xk_1 = value.m_xk_1;
+        }
+        #ifdef USE_INFO
+        std::cout << "TrapezIntegrator Copy assignment" << std::endl;
+        #endif         
+        return *this;
+    }                
+
+    TrapezIntegrator& operator=(Integrator&& value){
+        if (this != &value){
+            *static_cast<TFBase<T>*>(this) = std::move(*static_cast<TFBase<T>*>(&value));
+            m_TsDivTi = std::move(value.m_TsDivTi);
+            m_xk_1 = std::move(value.m_xk_1);
+        }
+        #ifdef USE_INFO
+        std::cout << "TrapezIntegrator Move assignment" << std::endl;
+        #endif         
+        return *this;
+    } 
+
+    ~TrapezIntegrator(){
+        #ifdef USE_INFO
+        std::cout << "TrapezIntegrator Dtor" << std::endl;
+        #endif
+    }               
+      
+    template<typename U>
+    constexpr void config(U&& Ti){
+        m_TsDivTi = TFBase<T>::m_Ts / Ti;
+    }
+
+    
+    template<typename U>
+    constexpr decltype(auto) out_est(U&& xk){
+        TFBase<T>::m_yk += (m_TsDivTi / remove_reference_t<U>(2.0) * (xk + m_xk_1));
+        m_xk_1 = xk;
+        return TFBase<T>::out_limit();
+    }
+
+    void reset(){
+        m_xk_1 = 0;
+        TFBase<T>::reset();
+    }
+};
+
+
+//template <typename T> TrapezIntegrator(T&&, T&&, T&&, T&&) -> TrapezIntegrator<T>;
+
 //--------------------------------------- PI-Regulator ---------------------------------------------
 template<class T>
 class PIreg final: public TFBase<T>{
