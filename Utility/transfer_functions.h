@@ -313,10 +313,12 @@ class TrapezIntegrator final: public TFBase<T>{
         std::cout << "TrapezIntegrator Ctor" << std::endl;
         #endif         
     }
+   
     constexpr TrapezIntegrator(T Ts, T Ti, T satPos, T satNeg ) : 
             m_xk_1(T{0}),
-            TFBase<T>(std::move(Ts), std::move(satPos), std::move(satNeg)){ 
-        config(std::move(Ti);
+            TFBase<T>(std::move(Ts), std::move(satPos), std::move(satNeg))
+   { 
+        config(std::move(Ti));
         #ifdef USE_INFO
         std::cout << "TrapezIntegrator Ctor" << std::endl;
         #endif          
@@ -354,7 +356,7 @@ class TrapezIntegrator final: public TFBase<T>{
         return *this;
     }                
 
-    TrapezIntegrator& operator=(Integrator&& value){
+    TrapezIntegrator& operator=(TrapezIntegrator&& value){
         if (this != &value){
             *static_cast<TFBase<T>*>(this) = std::move(*static_cast<TFBase<T>*>(&value));
             m_TsDivTi = std::move(value.m_TsDivTi);
@@ -380,7 +382,7 @@ class TrapezIntegrator final: public TFBase<T>{
     
     template<typename U>
     constexpr decltype(auto) out_est(U&& xk){
-        TFBase<T>::m_yk += (m_TsDivTi / remove_reference_t<U>(2.0) * (xk + m_xk_1));
+        TFBase<T>::m_yk += (m_TsDivTi / std::remove_reference_t<U>(2.0) * (xk + m_xk_1));
         m_xk_1 = xk;
         return TFBase<T>::out_limit();
     }
