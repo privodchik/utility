@@ -10,7 +10,7 @@
 namespace dc_comp{
 
     template<typename T>
-    class helper_t{
+    class dc_t{
         TF::Integrator<T>   integrator;
         T                   DC_component;
         TIMER               step_tmr;
@@ -18,8 +18,8 @@ namespace dc_comp{
         PT                  pt;
         
         public:
-            helper_t(time_t timeStep) : 
-                integrator(TF::Integrator<T>{AUX_UTILITYL::uSecToSec(timeStep), T{1.0}, T{100.0}, T{-100.0}}), 
+            dc_t(time_t timeStep = TIME_USEC(100)) : 
+                integrator(TF::Integrator<T>{AUX_UTILITY::uSecToSec<T>(timeStep), T{1.0}, T{100.0}, T{-100.0}}), 
                 DC_component(0)
                 {
                     timer_set(&step_tmr, timeStep);

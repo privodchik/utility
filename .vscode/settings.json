@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "time_defs.h": "c",
+        "time.h": "c",
+        "xtr1common": "cpp"
+    }
+}
