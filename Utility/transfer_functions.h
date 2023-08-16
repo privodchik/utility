@@ -500,7 +500,8 @@ class SimpsonIntegrator final: public TFBase<T>{
     }
     
     void reset(){
-        m_yk_2 = 0;
+        m_xk_2 = 0;
+        m_xk_1 = 0;
         TFBase<T>::reset();
     }
 };
