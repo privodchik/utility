@@ -42,7 +42,10 @@ namespace mras_pmsm{
     template <typename T>
     void adapt_model_init(AdaptModelPar_t<T>& am){
         am.isd = TF::Filter<T>{am.Ts, am.Ld/am.Rs/am.Wb, T(1000.), T(-1000.)};
-        am.isd = TF::Filter<T>{am.Ts, am.Lq/am.Rs/am.Wb, T(1000.), T(-1000.)};
+        am.isq = TF::Filter<T>{am.Ts, am.Lq/am.Rs/am.Wb, T(1000.), T(-1000.)};
+        am.isd.reset();
+        am.isq.reset();
+        am.wEva = T(0);
     }
     
     
@@ -56,18 +59,18 @@ namespace mras_pmsm{
     
     template <typename T>
     void adapt_model_est1(AdaptModelPar_t<T>& am, const dqo_t<T>& Vs){
-        float xk = Vs.d + am.wEva * (am.Lq) * (am.isq.yk);
-        am.isd.out_est(xk);
+        T xk = Vs.d + am.wEva * am.Lq * am.isq.out_get();
+        am.isd.out_est(xk / am.Rs);
         
-        xk = Vs.q - am.wEva*(am.isd.yk * am.Ld + am.Ff);
-        am.isq.out_est(xk); 
+        xk = Vs.q - am.wEva*(am.isd.out_get() * am.Ld + am.Ff);
+        am.isq.out_est(xk / am.Rs); 
     }
     
         
     template <typename T>
     T adapt_model_est2(AdaptModelPar_t<T>& am, const dqo_t<T>& Is){
         return  Is.d * am.isq.out_get() - 
-            Is.q * am.isd.out_get() -
+                Is.q * am.isd.out_get() -
                 (Is.q - am.isq.out_get()) * am.Ff/am.Ld;  
     }
     
