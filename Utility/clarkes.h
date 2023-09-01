@@ -9,7 +9,7 @@
 #include "user_constants.h"
 #include <cmath>
 
-#define ROTATING_FRAME_90 0 
+#define ROTATING_FRAME_90 1 
 
 
 namespace clarkes{

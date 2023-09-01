@@ -396,6 +396,120 @@ class TrapezIntegrator final: public TFBase<T>{
 
 //template <typename T> TrapezIntegrator(T&&, T&&, T&&, T&&) -> TrapezIntegrator<T>;
 
+
+//--------------------------------------- Simpson Integrator -----------------------------------------------
+template<class T>
+class SimpsonIntegrator final: public TFBase<T>{
+    
+    T m_TsDivTi;
+    
+    T m_xk_2;
+    T m_xk_1;
+    
+  public:
+
+    constexpr SimpsonIntegrator(){
+        #ifdef USE_INFO
+        std::cout << "SimpsonIntegrator Ctor" << std::endl;
+        #endif         
+    }
+    
+    constexpr SimpsonIntegrator(T Ts, T Ti, T satPos, T satNeg ) : 
+            TFBase<T>(std::move(Ts), std::move(satPos), std::move(satNeg)),
+            m_xk_2(T{0}),
+            m_xk_1(T{0})        
+    { 
+        config(std::move(Ti));
+        #ifdef USE_INFO
+        std::cout << "SimpsonIntegrator Ctor" << std::endl;
+        #endif          
+    }
+
+    SimpsonIntegrator(const SimpsonIntegrator& value) : 
+                    TFBase<T>(*static_cast<const TFBase<T>*>(&value)), 
+                    m_TsDivTi(value.m_TsDivTi),
+                    m_xk_2(value.m_xk_2) 
+                    m_xk_1(value.m_xk_1) 
+    {
+        #ifdef USE_INFO
+        std::cout << "SimpsonIntegrator Copy ctor" << std::endl;
+        #endif          
+    }
+
+    SimpsonIntegrator(SimpsonIntegrator&& value) : 
+                    TFBase<T>(std::move(*static_cast<TFBase<T>*>(&value))), 
+                    m_TsDivTi(std::move(value.m_TsDivTi)),
+                    m_xk_2(std::move(value.m_xk_2))        
+                    m_xk_1(std::move(value.m_xk_1))        
+    {
+        #ifdef USE_INFO
+        std::cout << "SimpsonIntegrator Move ctor" << std::endl;
+        #endif         
+    }
+
+    SimpsonIntegrator& operator=(const SimpsonIntegrator& value){
+        if (this != &value){
+            *static_cast<TFBase<T>*>(this) = *static_cast<const TFBase<T>*>(&value);
+            m_TsDivTi = value.m_TsDivTi;
+            m_xk_2 = value.m_xk_2;
+            m_xk_1 = value.m_xk_1;
+        }
+        #ifdef USE_INFO
+        std::cout << "SimpsonIntegrator Copy assignment" << std::endl;
+        #endif         
+        return *this;
+    }                
+
+    SimpsonIntegrator& operator=(SimpsonIntegrator&& value){
+        if (this != &value){
+            *static_cast<TFBase<T>*>(this) = std::move(*static_cast<TFBase<T>*>(&value));
+            m_TsDivTi = std::move(value.m_TsDivTi);
+            m_xk_2 = std::move(value.m_xk_2);
+            m_xk_1 = std::move(value.m_xk_1);
+        }
+        #ifdef USE_INFO
+        std::cout << "SimpsonIntegrator Move assignment" << std::endl;
+        #endif         
+        return *this;
+    } 
+
+    ~SimpsonIntegrator(){
+        #ifdef USE_INFO
+        std::cout << "SimpsonIntegrator Dtor" << std::endl;
+        #endif
+    }               
+      
+    template<typename U>
+    constexpr void config(U&& Ti){
+        m_TsDivTi = TFBase<T>::m_Ts / Ti;
+    }
+
+    
+    template<typename U>
+    constexpr decltype(auto) out_est(U&& xk){
+        
+        auto S = m_xk_2 + std::remove_reference_t<U>(4.0) * m_xk_1 + xk;
+        S *= (m_TsDivTi * std::remove_reference_t<U>(1.0/3.0));
+        S /= std::remove_reference_t<U>(2.0);
+        m_yk += S;
+
+        m_xk_2 = m_xk_1;
+        m_xk_1 = xk;
+        
+        return TFBase<T>::out_limit();
+    }
+    
+    void reset(){
+        m_xk_2 = 0;
+        m_xk_1 = 0;
+        TFBase<T>::reset();
+    }
+};
+
+
+//template <typename T> SimpsonIntegrator(T&&, T&&, T&&, T&&) -> SimpsonIntegrator<T>;
+
+
 //--------------------------------------- PI-Regulator ---------------------------------------------
 template<class T>
 class PIreg final: public TFBase<T>{
