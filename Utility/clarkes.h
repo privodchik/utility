@@ -152,16 +152,30 @@ namespace clarkes{
   template<typename T>
   void dqo2abo(dqo_t<T>& dqo, abo_t<T>& abo, T wt){
       #if ROTATING_FRAME_90
-      abo.a = dqo.d * sin(wt) + dqo.q * cos(wt);
+      abo.a =  dqo.d * sin(wt) + dqo.q * cos(wt);
       abo.b = -dqo.d * cos(wt) + dqo.q * sin(wt);
-      abo.o = dqo.o;
+      abo.o =  dqo.o;
       #else 
       abo.a = dqo.d * cos(wt) - dqo.q * sin(wt);
       abo.b = dqo.d * sin(wt) + dqo.q * cos(wt);
       abo.o = dqo.o;
       #endif
   }
-
+  
+  
+  template<typename T>
+  void abo2dqo(abo_t<T>& abo, dqo_t<T>& dqo, T wt){
+      #if ROTATING_FRAME_90
+      dqo.d = -abo.a * sin(wt) + abo.b * cos(wt);
+      dqo.q = -abo.a * cos(wt) - abo.b * sin(wt);
+      dqo.o =  abo.o;
+      #else 
+      dqo.d =  abo.a * cos(wt) + abo.b * sin(wt);
+      dqo.q = -abo.a * sin(wt) + abo.b * cos(wt);
+      dqo.o =  abo.o;
+      #endif
+  }
+  
 
   template<typename T>
   void c2p(T Vx, T Vy, polar_t<T>& V){

@@ -93,6 +93,12 @@ auto angle_saturate(T&& _wt){
 //    return _wt;
 //}
 
+template<typename T>
+auto wt_add_and_sat(T Ts, T& wt, T w){
+    wt += w * Ts;
+    return  angle_saturate(wt);
+}
+
 
 template <typename T1, typename T2, typename T3>
 struct CSpatial{
