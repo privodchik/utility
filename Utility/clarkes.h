@@ -9,7 +9,7 @@
 #include "user_constants.h"
 #include <cmath>
 
-#define ROTATING_FRAME_90 1 
+#define ROTATING_FRAME_90 0
 
 
 namespace clarkes{
@@ -67,7 +67,7 @@ namespace clarkes{
               ABC.B -
               ABC.C);
       
-      abo.b = static_cast<T>(1./sqrt(3.))*(
+      abo.b = static_cast<T>(1./utl::SQRT3)*(
               0 +
               ABC.B -
               ABC.C);
@@ -82,11 +82,11 @@ namespace clarkes{
       ABC.A = abo.a + abo.o;
       ABC.B = static_cast<T>(1.0/2.0)*(
               - abo.a 
-              + static_cast<T>(sqrt(3.0))*abo.b
+              + static_cast<T>(utl::SQRT3)*abo.b
               + abo.o);
       ABC.C = static_cast<T>(1.0/2.0)*(
               - abo.a 
-              - static_cast<T>(sqrt(3.0))*abo.b
+              - static_cast<T>(utl::SQRT3)*abo.b
               + abo.o); 
   }
   

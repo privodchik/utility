@@ -51,7 +51,7 @@ namespace csvpwm{
     template <typename T>
     TimeRealize_t<T> time_realize_estimate(T puVamp, T th, int sector){
         
-        theta_to_positive(th);
+        th = theta_to_positive(th);
         th -= static_cast<T>(PI_VAL/3.)*(sector - 1);
 
         TimeRealize_t<T> t;

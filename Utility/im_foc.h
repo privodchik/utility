@@ -21,7 +21,7 @@ namespace im_foc{
         clarkes::polar_t<T> vectFluxR;
         
         void init(){
-            integrator = TF::Integrator<T>{Ts, T(1.0)/Wb, T(1000.0), -T(1000.0)};
+            integrator = TF::Integrator<T>{Ts, T(1.0)/Wb, T(10.0), -T(10.0)};
             integrator.out_set(T(0.2));
             vectFluxR.mag = integrator.out_get();
             vectFluxR.th = 0;

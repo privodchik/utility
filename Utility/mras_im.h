@@ -72,7 +72,7 @@ namespace mras_im{
             Tr = im_par.Tr;
             kEm = std::pow(im_par.Lu, 2.0) / (im_par.Lu + im_par.Lrs);
             
-            T sat_ = T{1000.0};
+            T sat_ = T{10.0};
             
             ima = TF::Integrator<T>{im_par.Ts, T(1.0)/im_par.Wb, sat_, -sat_};
             ima.reset();
