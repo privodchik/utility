@@ -99,20 +99,6 @@ namespace mras2_im{
         
         T est(abo_t<T> u_ab, abo_t<T> i_ab){
 
-            T err_ = u_ab.a * im.Tsh + im.Kr * fluxRa.out_get();
-            fluxSa.out_est(err_);
-
-            err_ = u_ab.b * im.Tsh + im.Kr * fluxRb.out_get();
-            fluxSb.out_est(err_);
-
-            T w_ = reg.out_get();
-
-            err_ = im.Ks * fluxSa.out_get() - w_ * im.Trh * fluxRb.out_get();
-            fluxRa.out_est(err_);
-
-            err_ = im.Ks * fluxSb.out_get() + w_ * im.Trh * fluxRa.out_get();
-            fluxRb.out_est(err_);
-
             T ia_est = (fluxSa.out_get() - im.Kr * fluxRa.out_get())/im.Lsh;
             T ib_est = (fluxSb.out_get() - im.Kr * fluxRb.out_get())/im.Lsh;
 
@@ -121,8 +107,22 @@ namespace mras2_im{
 
             T e = dia * fluxRb.out_get() - dib * fluxRa.out_get();
 
+            T err_ = u_ab.a * im.Tsh + im.Kr * fluxRa.out_get();
+            fluxSa.out_est(err_);
 
-            return reg.out_est(e);
+            err_ = u_ab.b * im.Tsh + im.Kr * fluxRb.out_get();
+            fluxSb.out_est(err_);
+
+            T w_ = reg.out_est(e);
+
+            err_ = im.Ks * fluxSa.out_get() - w_ * im.Trh * fluxRb.out_get();
+            fluxRa.out_est(err_);
+
+            err_ = im.Ks * fluxSb.out_get() + w_ * im.Trh * fluxRa.out_get();
+            fluxRb.out_est(err_);
+
+
+            return w_;
         }
         
         T wr_get(){return reg.out_get();}
