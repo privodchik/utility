@@ -80,6 +80,9 @@ namespace mras3_im{
         T                       k;
         T                       Lmh;
         T                       Tb;
+        T                       Lu;
+        T                       Lr;
+
 
 
         void init(const IMpar_t<T>& im_par){
@@ -87,6 +90,8 @@ namespace mras3_im{
             Lmh = im_par.Lu*im_par.Lu/(im_par.Lu + im_par.Lrs);
             k = Lmh/Tr;
             Tb = T(1.0)/im_par.Wb;
+            Lu = im_par.Lu;
+            Lr = im_par.Lrs + im_par.Lu;
             T sat_ = T{10000.0};
             
             ima = TF::Integrator<T>{im_par.Ts, Tb, sat_, -sat_};
@@ -100,11 +105,15 @@ namespace mras3_im{
         
         clarkes::abo_t<T> est(abo_t<T> i_ab, T wr){
 
-            e.a = i_ab.a * Tb - ima.out_get() / Tr - wr *imb.out_get();
+            e.a = (i_ab.a - ima.out_get()) / Tr - wr *imb.out_get();
             ima.out_est(e.a);
+            e.a /= Tb;
+            e.a *= (Lu*Lu/Lr);
 
-            e.b = i_ab.b * Tb - imb.out_get() / Tr + wr *ima.out_get();
+            e.b = (i_ab.b - imb.out_get()) / Tr + wr *ima.out_get();
             imb.out_est(e.b);
+            e.b /= Tb;
+            e.b *= (Lu*Lu/Lr);
 
             return e;
         }
@@ -144,7 +153,6 @@ namespace mras3_im{
             clarkes::abo_t<T> e_adapt =  am.est(i_ab, reg.out_get());
             T err_ = e_ref.b * e_adapt.a - e_ref.a * e_adapt.b;
             //err_ = err_ * im.Lu*im.Lu/ (im.Lu + im.Lrs)/ im.Tr; 
-            err_ *= im.Wb*0.9;
             return reg.out_est( err_);
         }
         
