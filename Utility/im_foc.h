@@ -21,14 +21,14 @@ namespace im_foc{
         clarkes::polar_t<T> vectFluxR;
         
         void init(){
-            integrator = TF::Integrator<T>{Ts, T(1.0)/Wb, T(10.0), -T(10.0)};
-            integrator.out_set(T(0.2));
+            integrator = TF::Integrator<T>{Ts, Tr/Wb, T(10000.0), -T(10000.0)};
+            integrator.out_set(T(0.01));
             vectFluxR.mag = integrator.out_get();
             vectFluxR.th = 0;
         }
         
         void reset(){
-            integrator.out_set(T(0.2));
+            integrator.out_set(T(0.01));
             vectFluxR.mag = integrator.out_get();
             vectFluxR.th = 0;
         }
@@ -42,7 +42,7 @@ namespace im_foc{
         
         T k_1div_Tr = T(1.0)/params.Tr;
         
-        T err_ = (is_dq.d * params.Lu - params.integrator.out_get()) * k_1div_Tr;
+        T err_ = is_dq.d * params.Lu - params.integrator.out_get();
                 
         params.vectFluxR.mag = params.integrator.out_est(err_);
         
@@ -50,7 +50,12 @@ namespace im_foc{
         
         T w_sync = w_slide + wr;
         
-        wt_add_and_sat<T>(params.Ts, params.vectFluxR.th, w_sync * params.Wb);
+        //wt_add_and_sat<T>(params.Ts, params.vectFluxR.th, w_sync * params.Wb);
+
+        params.vectFluxR.th += w_sync * params.Ts * params.Wb;
+
+        if (params.vectFluxR.th > utl::PI) params.vectFluxR.th -= utl::DBL_PI;
+        else  if (params.vectFluxR.th < -utl::PI) params.vectFluxR.th += utl::DBL_PI;
       
         return params.vectFluxR;  
     }

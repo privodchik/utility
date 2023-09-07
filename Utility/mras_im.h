@@ -16,6 +16,7 @@ namespace mras_im{
     struct IMpar_t{
             T Ts;
             T Wb;
+            T Rb;
             T Lu;
             T Lss;
             T Lrs;
@@ -33,7 +34,7 @@ namespace mras_im{
         void init(const IMpar_t<T>& im_par){
             T sigma = T(1.0) - im_par.Lu * im_par.Lu / ( (im_par.Lu+im_par.Lss) 
                                                         *(im_par.Lu+im_par.Lrs) );
-            k = sigma * (im_par.Lu + im_par.Lss) / (im_par.Wb * im_par.Ts);
+            k = sigma * (im_par.Lu + im_par.Lss) / (im_par.Rb * im_par.Ts);
         }
         
         
