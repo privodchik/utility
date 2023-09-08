@@ -114,6 +114,7 @@ namespace mras4_im{
             
             PsiRa = TF::Integrator<T>{im_par.Ts, T(1.0), sat_, -sat_};            
             PsiRb = TF::Integrator<T>{im_par.Ts, T(1.0), sat_, -sat_};
+
         }
         
         
@@ -152,6 +153,7 @@ namespace mras4_im{
       public:   
         
         void init(){
+            im.init();
             rm.init(im);
             am.init(im);
             T sat_ = T{10.0};
