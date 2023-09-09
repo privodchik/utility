@@ -166,6 +166,7 @@ namespace mras4_im{
             clarkes::abo_t<T> e_ref = rm.est(u_ab, i_ab);
             clarkes::abo_t<T> e_adapt =  am.est(i_ab, reg.out_get());
             T err_ = e_ref.b * e_adapt.a - e_ref.a * e_adapt.b;
+            err_ /= im.Wb; 
             return reg.out_est( err_);
         }
         
