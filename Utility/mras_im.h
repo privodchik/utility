@@ -16,11 +16,16 @@ namespace mras_im{
     struct IMpar_t{
             T Ts;
             T Wb;
-            T Rb;
+
             T Lu;
             T Lss;
             T Lrs;
+
             T Tr;
+
+            void init(){
+                Tr = (Lu + Lss) / (Lu + Lrs);
+            }
     };
     
     
@@ -32,9 +37,14 @@ namespace mras_im{
         
         
         void init(const IMpar_t<T>& im_par){
-            T sigma = T(1.0) - im_par.Lu * im_par.Lu / ( (im_par.Lu+im_par.Lss) 
-                                                        *(im_par.Lu+im_par.Lrs) );
-            k = sigma * (im_par.Lu + im_par.Lss) / (im_par.Rb * im_par.Ts);
+            T Lu = im_par.Lu;
+            T Ls = im_par.Lu + im_par.Lss;
+            T Lr = im_par.Lu + im_par.Lrs;
+            T Tb = T(1.0) / im_par.Wb;
+            T Ts = im_par.Ts;
+
+            T sigma = T(1.0) - Lu * Lu / (Ls * Lr);
+            k = sigma * Ls * Tb / Ts;
         }
         
         
@@ -67,34 +77,41 @@ namespace mras_im{
         TF::Integrator<T>       imb;
         T                       Tr;
         T                       kEm;
+        T                       Tb;
         
 
         void init(const IMpar_t<T>& im_par){
+            
             Tr = im_par.Tr;
-            kEm = std::pow(im_par.Lu, 2.0) / (im_par.Lu + im_par.Lrs);
-            
+            T Ts = im_par.Ts;
+            T Lu = im_par.Lu;
+            T Lr = im_par.Lu + im_par.Lrs;
+            Tb = T(1.0)/im_par.Wb;
             T sat_ = T{10.0};
+
+            kEm = Lu * Lu / Lr;
             
-            ima = TF::Integrator<T>{im_par.Ts, T(1.0)/im_par.Wb, sat_, -sat_};
+            ima = TF::Integrator<T>{Ts, Tb, sat_, -sat_};
             ima.reset();
             
-            imb = TF::Integrator<T>{im_par.Ts, T(1.0)/im_par.Wb, sat_, -sat_};
+            imb = TF::Integrator<T>{Ts, Tb, sat_, -sat_};
             imb.reset();
             
         }
         
         
         T est(abo_t<T> i_ab, T wr){
-            T k_1divTr = T(1.0)/Tr;
             
             T ima_z_1 = ima.out_get();
             T imb_z_1 = imb.out_get();
             
-            T err_ = (i_ab.a -  ima_z_1) * k_1divTr  - wr * imb_z_1; 
-            ema = ima.out_est(err_) * kEm;
+            T err_ = (i_ab.a -  ima_z_1) / Tr  - wr * imb_z_1; 
+            ema = err_* kEm;
+            ima.out_est(err_);
             
-            err_ = (i_ab.b -  imb_z_1) * k_1divTr  + wr * ima_z_1; 
-            emb = imb.out_est(err_) * kEm;
+            err_ = (i_ab.b -  imb_z_1) / Tr  + wr * ima_z_1; 
+            emb = err_ * kEm;
+            imb.out_est(err_);
             
             q = i_ab.a * emb - i_ab.b * ema;
             
@@ -125,6 +142,7 @@ namespace mras_im{
       public:   
         
         void init(){
+            im.init();
             rm.init(im);
             am.init(im);
             T sat_ = T{10.0};
@@ -134,7 +152,7 @@ namespace mras_im{
         
         T est(abo_t<T> u_ab, abo_t<T> i_ab){
             
-            T err_ = rm.est(u_ab, i_ab) - am.est(i_ab, reg.out_get());
+            T err_ = rm.est(u_ab, i_ab) - am.est(i_ab, reg.out_get()); 
             return reg.out_est(err_);
         }
         
