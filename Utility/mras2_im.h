@@ -9,7 +9,7 @@
 #include "clarkes.h"
 #include "transfer_functions.h"
 
-namespace mras2_im{
+namespace mras2_im{ // Tyagushev
     using namespace clarkes;
 
     template <typename T>

@@ -9,7 +9,7 @@
 #include "clarkes.h"
 #include "transfer_functions.h"
 
-namespace mras4_im{
+namespace mras4_im{ // Kalachev
     using namespace clarkes;
 
     template <typename T>

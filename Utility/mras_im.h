@@ -9,7 +9,7 @@
 #include "clarkes.h"
 #include "transfer_functions.h"
 
-namespace mras_im{
+namespace mras_im{ // Texas
     using namespace clarkes;
 
     template <typename T>

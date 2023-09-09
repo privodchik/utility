@@ -9,7 +9,7 @@
 #include "clarkes.h"
 #include "transfer_functions.h"
 
-namespace mras_pmsm{
+namespace mras_pmsm{ //Texas
     using namespace clarkes;
 
     template <typename T>

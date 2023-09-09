@@ -9,15 +9,13 @@
 #include "clarkes.h"
 #include "transfer_functions.h"
 
-namespace mras3_im{
+namespace mras3_im{ // P.Vas
     using namespace clarkes;
 
     template <typename T>
     struct IMpar_t{
             T Ts;
             T Wb;
-            T Lb;
-            T Rb;
             T Rs;
             T Rr;
             T Lu;
@@ -33,31 +31,31 @@ namespace mras3_im{
         T sigma;
         T Lsh;
         T Rs;
-        T Rb;
-        T Lb;
+        T Tb;
         
-
-
         abo_t<T> e;
         
         TF::Differentiator<T> dEsa;
         TF::Differentiator<T> dEsb;
             
         void init(const IMpar_t<T>& im_par){
-            sigma = T(1.0) - im_par.Lu*im_par.Lu/((im_par.Lu + im_par.Lrs)*(im_par.Lu + im_par.Lrs));
-            Lsh = sigma * (im_par.Lu + im_par.Lss);
+
             Rs = im_par.Rs;
-            Rb = im_par.Rb;
-            Lb = im_par.Lb;
+            T Lu = im_par.Lu;
+            T Ls = im_par.Lu + im_par.Lss;
+            T Lr = im_par.Lu + im_par.Lrs;
+            Tb = T(1.0)/im_par.Wb;
+            sigma = T(1.0) - Lu*Lu/(Ls*Lr);
+            Lsh = sigma * Ls;
             e.a = e.b = e.o = T{0};
-            dEsa = TF::Differentiator<T>{im_par.Ts, T{10000.0}, -T{10000.0}};
-            dEsb = TF::Differentiator<T>{im_par.Ts, T{10000.0}, -T{10000.0}};
+            dEsa = TF::Differentiator<T>{im_par.Ts, T{1000.0}, -T{1000.0}};
+            dEsb = TF::Differentiator<T>{im_par.Ts, T{1000.0}, -T{1000.0}};
         }
         
         
         abo_t<T> est(abo_t<T> u_ab, abo_t<T> i_ab){
-            e.a = u_ab.a - (dEsa.out_est(i_ab.a) * Lsh * Lb / Rb  + Rs * i_ab.a);
-            e.b = u_ab.b - (dEsb.out_est(i_ab.b) * Lsh * Lb / Rb  + Rs * i_ab.b);
+            e.a = u_ab.a - (dEsa.out_est(i_ab.a) * Lsh * Tb  + Rs * i_ab.a);
+            e.b = u_ab.b - (dEsb.out_est(i_ab.b) * Lsh * Tb  + Rs * i_ab.b);
             return e;
         }
         
@@ -87,12 +85,12 @@ namespace mras3_im{
 
         void init(const IMpar_t<T>& im_par){
             Tr = im_par.Tr;
-            Lmh = im_par.Lu*im_par.Lu/(im_par.Lu + im_par.Lrs);
-            k = Lmh/Tr;
-            Tb = T(1.0)/im_par.Wb;
             Lu = im_par.Lu;
-            Lr = im_par.Lrs + im_par.Lu;
-            T sat_ = T{10000.0};
+            Lr = im_par.Lu + im_par.Lrs; 
+            Lmh = Lu*Lu/Lr;
+            k = Tr/Lmh;
+            Tb = T(1.0)/im_par.Wb;
+            T sat_ = T{1000.0};
             
             ima = TF::Integrator<T>{im_par.Ts, Tb, sat_, -sat_};
             ima.reset();
@@ -105,15 +103,16 @@ namespace mras3_im{
         
         clarkes::abo_t<T> est(abo_t<T> i_ab, T wr){
 
-            e.a = (i_ab.a - ima.out_get()) / Tr - wr *imb.out_get();
-            ima.out_est(e.a);
-            e.a /= Tb;
-            e.a *= (Lu*Lu/Lr);
+            T ima_z_1 = ima.out_get();
+            T imb_z_1 = imb.out_get();
 
-            e.b = (i_ab.b - imb.out_get()) / Tr + wr *ima.out_get();
+            e.a = i_ab.a * Tb - ima_z_1 / Tr - wr *imb_z_1;
+            ima.out_est(e.a);
+            e.a *= k;
+
+            e.b = i_ab.b * Tb - imb_z_1 / Tr + wr *ima_z_1;
             imb.out_est(e.b);
-            e.b /= Tb;
-            e.b *= (Lu*Lu/Lr);
+            e.b *= k;
 
             return e;
         }
@@ -142,7 +141,7 @@ namespace mras3_im{
         void init(){
             rm.init(im);
             am.init(im);
-            T sat_ = T{10000.0};
+            T sat_ = T{10.0};
             reg = TF::PIreg<T>{im.Ts, Kadapt, Tiadapt, sat_, -sat_};
         }
         
@@ -152,7 +151,6 @@ namespace mras3_im{
             clarkes::abo_t<T> e_ref = rm.est(u_ab, i_ab);
             clarkes::abo_t<T> e_adapt =  am.est(i_ab, reg.out_get());
             T err_ = e_ref.b * e_adapt.a - e_ref.a * e_adapt.b;
-            //err_ = err_ * im.Lu*im.Lu/ (im.Lu + im.Lrs)/ im.Tr; 
             return reg.out_est( err_);
         }
         
