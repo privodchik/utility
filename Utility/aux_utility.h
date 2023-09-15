@@ -67,9 +67,14 @@ namespace AUX_UTILITY{
     
     
     
-    template<typename T>
-    T MAX(T v1, T v2){
-        return v1 > v2 ? v1 : v2;
+    template <typename T1, typename T2>
+    decltype(auto) MAX(T1&& v1, T2&& v2){
+        return v1 > v2 ? std::forward<T1>(v1) : std::forward<T2>(v2);
+    }
+
+    template <typename T1, typename T2, typename... Types>
+    decltype(auto) MAX(T1&& v1, T2&& v2, Types&&... args){
+        return MAX(std::forward<T1>(v1), MAX(std::forward<T2>(v2), std::forward<Types>(args)...));
     }
     
     
@@ -83,15 +88,11 @@ namespace AUX_UTILITY{
 
 template <typename T>
 auto angle_saturate(T&& _wt){
-    if (_wt > std::remove_reference_t<T>(utl::PI)) _wt -= std::remove_reference_t<T>(utl::DBL_PI);
-    else if (_wt < std::remove_reference_t<T>(-utl::PI)) _wt += std::remove_reference_t<T>(utl::DBL_PI);
+  	using Type = std::remove_reference_t<T>;
+    if (_wt > Type(utl::PI)) _wt -= Type(utl::DBL_PI);
+    else if (_wt < Type(-utl::PI)) _wt += Type(utl::DBL_PI);
     return _wt;
 }
-//inline iq_t angle_saturate(iq_t _wt){
-//    if (_wt > IQ(utl::PI)) _wt -= IQ(utl::DBL_PI);
-//    else if (_wt < IQ(-utl::PI)) _wt += IQ(utl::DBL_PI);
-//    return _wt;
-//}
 
 template<typename T>
 auto wt_add_and_sat(T Ts, T& wt, T w){
