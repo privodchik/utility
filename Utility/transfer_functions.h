@@ -98,7 +98,8 @@ class TFBase{
 
   protected:
     constexpr decltype(auto) out_limit(){
-        return m_yk = (m_yk > m_satPos ? m_satPos : (m_yk < m_satNeg ? m_satNeg : m_yk));
+        m_yk = (m_yk > m_satPos ? m_satPos : (m_yk < m_satNeg ? m_satNeg : m_yk));
+        return const_cast<const T&>(m_yk);
     }
   public:
     constexpr const T& out_get() const{return m_yk;}
@@ -428,7 +429,7 @@ class SimpsonIntegrator final: public TFBase<T>{
     SimpsonIntegrator(const SimpsonIntegrator& value) : 
                     TFBase<T>(*static_cast<const TFBase<T>*>(&value)), 
                     m_TsDivTi(value.m_TsDivTi),
-                    m_xk_2(value.m_xk_2) 
+                    m_xk_2(value.m_xk_2), 
                     m_xk_1(value.m_xk_1) 
     {
         #ifdef USE_INFO
@@ -439,7 +440,7 @@ class SimpsonIntegrator final: public TFBase<T>{
     SimpsonIntegrator(SimpsonIntegrator&& value) : 
                     TFBase<T>(std::move(*static_cast<TFBase<T>*>(&value))), 
                     m_TsDivTi(std::move(value.m_TsDivTi)),
-                    m_xk_2(std::move(value.m_xk_2))        
+                    m_xk_2(std::move(value.m_xk_2)),        
                     m_xk_1(std::move(value.m_xk_1))        
     {
         #ifdef USE_INFO
@@ -491,7 +492,7 @@ class SimpsonIntegrator final: public TFBase<T>{
         auto S = m_xk_2 + std::remove_reference_t<U>(4.0) * m_xk_1 + xk;
         S *= (m_TsDivTi * std::remove_reference_t<U>(1.0/3.0));
         S /= std::remove_reference_t<U>(2.0);
-        m_yk += S;
+        TFBase<T>::m_yk += S;
 
         m_xk_2 = m_xk_1;
         m_xk_1 = xk;
