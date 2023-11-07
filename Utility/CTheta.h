@@ -40,8 +40,8 @@ class CTheta{
   private:
     
     constexpr void saturation(T wt){
-        if (wt > T(utl::PI)) wt -= T(utl::DBL_PI);
-        else if (wt < T(-utl::PI)) wt += T(utl::DBL_PI);
+        if (wt >= static_cast<T>(utl::PI)) wt -= static_cast<T>(utl::DBL_PI);
+        else if (wt <= static_cast<T>(-utl::PI)) wt += static_cast<T>(utl::DBL_PI);
         m_th.out_set(std::move(wt));
     }
     

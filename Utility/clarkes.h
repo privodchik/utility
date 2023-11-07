@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <cmath>
 
-#define ROTATING_FRAME_90 1
+#define ROTATING_FRAME_90 0
 
 
 namespace clarkes{
