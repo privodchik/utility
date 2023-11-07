@@ -26,8 +26,6 @@ namespace clarkes{
       T A;
       T B;
       T C;
-      
-      ABC_t() : A(T{0}), B(T{0}), C(T{0}){}
   };
 
 
