@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <cmath>
 
-#define ROTATING_FRAME_90 0
+#define ROTATING_FRAME_90 1
 
 
 namespace clarkes{
@@ -26,8 +26,6 @@ namespace clarkes{
       T A;
       T B;
       T C;
-      
-      ABC_t() : A(T{0}), B(T{0}), C(T{0}){}
   };
 
 
