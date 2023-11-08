@@ -65,7 +65,19 @@ namespace clarkes{
   template<typename T>
   abo_t<T> ABC2abo(const ABC_t<T>& ABC){
       abo_t<T> abo;
+      #if ROTATING_FRAME_90
+      abo.b = -static_cast<T>(1./3.)*(
+              static_cast<T>(2.0) * ABC.A -
+              ABC.B -
+              ABC.C);
       
+      abo.a = static_cast<T>(1./SQRT3)*(
+              0 +
+              ABC.B -
+              ABC.C);
+      
+      abo.o = static_cast<T>(1./3.)*(ABC.A + ABC.B + ABC.C);
+      #else
       abo.a = static_cast<T>(1./3.)*(
               static_cast<T>(2.0) * ABC.A -
               ABC.B -
@@ -77,6 +89,7 @@ namespace clarkes{
               ABC.C);
       
       abo.o = static_cast<T>(1./3.)*(ABC.A + ABC.B + ABC.C);
+      #endif //#if ROTATING_FRAME_90
       
       return abo;
   }
@@ -84,6 +97,7 @@ namespace clarkes{
   
   template<typename T>
   void ABC2abo(const ABC_t<T>& ABC, abo_t<T>& abo){
+      
       abo.a = static_cast<T>(1./3.)*(
               static_cast<T>(2.0) * ABC.A -
               ABC.B -
@@ -103,6 +117,18 @@ namespace clarkes{
   ABC_t<T> abo2ABC(const abo_t<T>& abo){
 
       ABC_t<T> ABC;
+      
+      #if ROTATING_FRAME_90
+      ABC.A = abo.b + abo.o;
+      ABC.B = static_cast<T>(1.0/2.0)*(
+              - abo.b 
+              - static_cast<T>(SQRT3)*abo.a
+              + abo.o);
+      ABC.C = static_cast<T>(1.0/2.0)*(
+              - abo.b 
+              + static_cast<T>(SQRT3)*abo.a
+              + abo.o); 
+      #else
       ABC.A = abo.a + abo.o;
       ABC.B = static_cast<T>(1.0/2.0)*(
               - abo.a 
@@ -112,6 +138,7 @@ namespace clarkes{
               - abo.a 
               - static_cast<T>(SQRT3)*abo.b
               + abo.o); 
+      #endif // #if ROTATING_FRAME_90
       return ABC;
   }
   
