@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <cmath>
 
-#define ROTATING_FRAME_90 0
+#define ROTATING_FRAME_90 1
 
 
 namespace clarkes{
@@ -66,12 +66,12 @@ namespace clarkes{
   abo_t<T> ABC2abo(const ABC_t<T>& ABC){
       abo_t<T> abo;
       #if ROTATING_FRAME_90
-      abo.b = -static_cast<T>(1./3.)*(
+      abo.b = static_cast<T>(1./3.)*(
               static_cast<T>(2.0) * ABC.A -
               ABC.B -
               ABC.C);
       
-      abo.a = static_cast<T>(1./SQRT3)*(
+      abo.a = -static_cast<T>(1./SQRT3)*(
               0 +
               ABC.B -
               ABC.C);
@@ -315,8 +315,8 @@ namespace clarkes{
   dqo_t<T> abo2dqo(const abo_t<T>& abo, T wt){
       dqo_t<T> dqo; 
       #if ROTATING_FRAME_90
-      dqo.d = -abo.a * sin(wt) + abo.b * cos(wt);
-      dqo.q = -abo.a * cos(wt) - abo.b * sin(wt);
+      dqo.d = abo.a * sin(wt) - abo.b * cos(wt);
+      dqo.q = abo.a * cos(wt) + abo.b * sin(wt);
       dqo.o =  abo.o;
       #else 
       dqo.d =  abo.a * cos(wt) + abo.b * sin(wt);
