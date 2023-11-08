@@ -34,7 +34,7 @@ class CPLL{
 
                    
     template<typename U>                
-    const PLLOuts_t<T>& out_est(U&& Vabo){
+    constexpr const PLLOuts_t<T>& out_est(U&& Vabo){
         
         clarkes::abo2dqo<T>(Vabo, m_Vdq, m_outs.theta.out_get());
         m_outs.w = WREF + m_piReg.out_est(T(0) - m_Vdq.q);
@@ -43,8 +43,8 @@ class CPLL{
         return m_outs;
     }
     
-    const T& w_get() const{return m_outs.w;}
-    const T& theta_get() const{return m_outs.theta.out_get();}
+    constexpr const T& w_get() const{return m_outs.w;}
+    constexpr const T& theta_get() const{return m_outs.theta.out_get();}
     
 };
 
