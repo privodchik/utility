@@ -1,5 +1,9 @@
-// Date: 02.11.2023
-// Created by: NPT
+/**
+ @file
+ @date         20.01.2022
+ @copyright    NPT
+ @author       ID  
+*/
 
 #pragma once
 
@@ -48,3 +52,6 @@ class CTheta{
 };
 
 
+/** @var CTheta::m_th
+    @brief curretnt angle
+  */

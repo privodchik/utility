@@ -1,5 +1,9 @@
-// Date: 19.02.2021
-// Creator: ID
+/**
+ @file
+ @date         19.02.2022
+ @copyright    NPT
+ @author       ID  
+*/
 
 #ifndef _UTILITY_H
 #define _UTILITY_H
@@ -46,11 +50,20 @@ constexpr std::size_t array_size(T (&)[N]){
 #define ABS(x) ((x) < 0 ? (-x) : (x))
 
 
+/**
+  * @brief Saturate value
+  * @param[in] _inSignal input value
+  * @param[in] _satPos rhs limit value
+  * @param[in] _satNeg lhs limit value
+  * @param[out] saturated value
+  */
+
 template <typename T>
 T saturate(T _inSignal, T _satPos, T _satNeg){
     return (_inSignal > _satPos) ? _satPos :
            (_inSignal < _satNeg) ? _satNeg : _inSignal;
 }
+
 
 namespace AUX_UTILITY{
 
@@ -71,6 +84,7 @@ namespace AUX_UTILITY{
     decltype(auto) MAX(T1&& v1, T2&& v2){
         return v1 > v2 ? std::forward<T1>(v1) : std::forward<T2>(v2);
     }
+    
 
     template <typename T1, typename T2, typename... Types>
     decltype(auto) MAX(T1&& v1, T2&& v2, Types&&... args){
@@ -78,14 +92,27 @@ namespace AUX_UTILITY{
     }
     
     
+    /**
+      * @brief Convert time from uSec to Sec
+      * @param[in] time_uSec time in uSec
+      * @param[out] time in Sec
+      */        
+    
     template<typename T>
-    T uSecToSec(time_t time_uSec){
+    constexpr T uSecToSec(time_t time_uSec){
         return static_cast<T>(time_uSec * 0.000'001);
     }
     
 }
 
 
+                              
+/**
+  * @brief Saturate angle in range [-PI, PI] 
+  * @param[in] _wt universal reference to current angle
+  * @param[out] angle with saturate
+  */
+                              
 template <typename T>
 auto angle_saturate(T&& _wt){
   	using Type = std::remove_reference_t<T>;
@@ -93,7 +120,16 @@ auto angle_saturate(T&& _wt){
     else if (_wt < Type(-utl::PI)) _wt += Type(utl::DBL_PI);
     return _wt;
 }
-
+                              
+                              
+/**
+  * @brief Add and saturate angle in range [-PI, PI] on current step of estimation 
+  * @param[in] Ts time step
+  * @param[in] wt reference to current angle
+  * @param[in] w frequence
+  * @param[out] angle with saturate
+  */
+                              
 template<typename T>
 auto wt_add_and_sat(T Ts, T& wt, T w){
     wt += w * Ts;
