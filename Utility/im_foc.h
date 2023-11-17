@@ -54,8 +54,8 @@ namespace im_foc{
 
         params.vectFluxR.th += w_sync * params.Ts * params.Wb;
 
-        if (params.vectFluxR.th > utl::PI) params.vectFluxR.th -= utl::DBL_PI;
-        else  if (params.vectFluxR.th < -utl::PI) params.vectFluxR.th += utl::DBL_PI;
+        if (params.vectFluxR.th > utl::PIx1) params.vectFluxR.th -= utl::PIx2;
+        else  if (params.vectFluxR.th < -utl::PIx1) params.vectFluxR.th += utl::PIx2;
       
         return params.vectFluxR;  
     }

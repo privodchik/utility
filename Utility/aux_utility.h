@@ -116,8 +116,8 @@ namespace AUX_UTILITY{
 template <typename T>
 auto angle_saturate(T&& _wt){
   	using Type = std::remove_reference_t<T>;
-    if (_wt > Type(utl::PI)) _wt -= Type(utl::DBL_PI);
-    else if (_wt < Type(-utl::PI)) _wt += Type(utl::DBL_PI);
+    if (_wt > static_cast<Type>(utl::PIx1)) _wt -= static_cast<Type>(utl::PIx2);
+    else if (_wt < static_cast<Type>(-utl::PIx1)) _wt += static_cast<Type>(utl::PIx2);
     return _wt;
 }
                               

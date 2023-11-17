@@ -14,7 +14,7 @@
 namespace csvpwm{
     using namespace clarkes;
 
-    constexpr const float PI_VAL = utl::PI;
+    constexpr const float PI_VAL = utl::PIx1;
 
     template <typename T> 
     T theta_to_positive(T theta){

@@ -9,6 +9,10 @@
 #define _CGRID_H
 
 #include "CTheta.h"
+#include "arm_math.h"
+#include "IQmathCPP.h"
+#include <type_traits>
+#include <utility>
 
 
 /** @class 
@@ -24,16 +28,22 @@ class CGrid{
   
   public:
     constexpr CGrid(T Ts_, T amp_, T w_)
-        
         : amp(amp_)
-          , w(w_)
-          , wt{Ts_}
-          , currentValue(0){}
+        , w(w_)
+        , wt{Ts_}
+        , currentValue(0){}
    
-      T out_est(){return currentValue = amp * std::sin(wt.out_est(w));}
+        
+       T out_est(){
+          if constexpr(std::is_floating_point_v<T>){
+              return currentValue = amp * arm_sin_f32(wt.out_est(w)); // for "arm_math.h"; FIXME!
+          }
+          else{
+              return currentValue = amp * CPP_IQsin(wt.out_est(w));
+          }
+      }
+      
       const T& out_get() const {return currentValue;}
-    
-    
       void angle_set(T th){wt.out_set(th);}
 };
 

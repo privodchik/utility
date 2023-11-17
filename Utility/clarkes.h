@@ -8,15 +8,16 @@
 #include <stdint.h>
 #include <cmath>
 
-#define ROTATING_FRAME_90 1
+#define ROTATING_FRAME_90 0
 
 
 namespace clarkes{
     
     using Type = float;
     
-    constexpr const Type PI    = 3.14159265358979;
-    constexpr const Type PIx2  = PI * 2.0;
+    
+    constexpr const Type PIx1    = 3.14159265358979;
+    constexpr const Type PIx2  = PIx1 * 2.0;
     constexpr const Type SQRT3 = 1.73205080756888;
     
     
@@ -164,25 +165,25 @@ namespace clarkes{
 #if ROTATING_FRAME_90
       dqo.d = static_cast<T>(2./3.)*(
                ABC.A * sin(wt) +
-               ABC.B * sin(wt - static_cast<T>(2./3.*PI)) +
-               ABC.C * sin(wt + static_cast<T>(2./3.*PI)));
+               ABC.B * sin(wt - static_cast<T>(2./3.*PIx1)) +
+               ABC.C * sin(wt + static_cast<T>(2./3.*PIx1)));
       
       dqo.q = static_cast<T>(2./3.)*(
               ABC.A * cos(wt) +
-              ABC.B * cos(wt - static_cast<T>(2./3.*PI)) +
-              ABC.C * cos(wt + static_cast<T>(2./3.*PI)));
+              ABC.B * cos(wt - static_cast<T>(2./3.*PIx1)) +
+              ABC.C * cos(wt + static_cast<T>(2./3.*PIx1)));
       
       dqo.o = static_cast<T>(1./3.)*(ABC.A + ABC.B + ABC.C);
 #else      
       dqo.d = static_cast<T>(2./3.)*(
                ABC.A * cos(wt) +
-               ABC.B * cos(wt - static_cast<T>(2./3.*PI)) +
-               ABC.C * cos(wt + static_cast<T>(2./3.*PI)));
+               ABC.B * cos(wt - static_cast<T>(2./3.*PIx1)) +
+               ABC.C * cos(wt + static_cast<T>(2./3.*PIx1)));
       
       dqo.q = static_cast<T>(-2./3.)*(
               ABC.A * sin(wt) +
-              ABC.B * sin(wt - static_cast<T>(2./3.*PI)) +
-              ABC.C * sin(wt + static_cast<T>(2./3.*PI)));
+              ABC.B * sin(wt - static_cast<T>(2./3.*PIx1)) +
+              ABC.C * sin(wt + static_cast<T>(2./3.*PIx1)));
       
       dqo.o = static_cast<T>(1./3.)*(ABC.A + ABC.B + ABC.C);
 #endif
@@ -198,25 +199,25 @@ namespace clarkes{
 #if ROTATING_FRAME_90
       dqo.d = static_cast<T>(2./3.)*(
                ABC.A * sin(wt) +
-               ABC.B * sin(wt - static_cast<T>(2./3.*PI)) +
-               ABC.C * sin(wt + static_cast<T>(2./3.*PI)));
+               ABC.B * sin(wt - static_cast<T>(2./3.*PIx1)) +
+               ABC.C * sin(wt + static_cast<T>(2./3.*PIx1)));
       
       dqo.q = static_cast<T>(2./3.)*(
               ABC.A * cos(wt) +
-              ABC.B * cos(wt - static_cast<T>(2./3.*PI)) +
-              ABC.C * cos(wt + static_cast<T>(2./3.*PI)));
+              ABC.B * cos(wt - static_cast<T>(2./3.*PIx1)) +
+              ABC.C * cos(wt + static_cast<T>(2./3.*PIx1)));
       
       dqo.o = static_cast<T>(1./3.)*(ABC.A + ABC.B + ABC.C);
 #else      
       dqo.d = static_cast<T>(2./3.)*(
                ABC.A * cos(wt) +
-               ABC.B * cos(wt - static_cast<T>(2./3.*PI)) +
-               ABC.C * cos(wt + static_cast<T>(2./3.*PI)));
+               ABC.B * cos(wt - static_cast<T>(2./3.*PIx1)) +
+               ABC.C * cos(wt + static_cast<T>(2./3.*PIx1)));
       
       dqo.q = static_cast<T>(-2./3.)*(
               ABC.A * sin(wt) +
-              ABC.B * sin(wt - static_cast<T>(2./3.*PI)) +
-              ABC.C * sin(wt + static_cast<T>(2./3.*PI)));
+              ABC.B * sin(wt - static_cast<T>(2./3.*PIx1)) +
+              ABC.C * sin(wt + static_cast<T>(2./3.*PIx1)));
       
       dqo.o = static_cast<T>(1./3.)*(ABC.A + ABC.B + ABC.C);
 #endif
@@ -231,21 +232,21 @@ namespace clarkes{
       ABC.A = dqo.d * sin(wt) + 
               dqo.q * cos(wt) +
               dqo.o;
-      ABC.B = dqo.d * sin(wt - static_cast<T>(2.*PI/3.)) + 
-              dqo.q * cos(wt - static_cast<T>(2.*PI/3.)) +
+      ABC.B = dqo.d * sin(wt - static_cast<T>(2.*PIx1/3.)) + 
+              dqo.q * cos(wt - static_cast<T>(2.*PIx1/3.)) +
               dqo.o;
-      ABC.C = dqo.d * sin(wt + static_cast<T>(2.*PI/3.)) + 
-              dqo.q * cos(wt + static_cast<T>(2.*PI/3.)) +
+      ABC.C = dqo.d * sin(wt + static_cast<T>(2.*PIx1/3.)) + 
+              dqo.q * cos(wt + static_cast<T>(2.*PIx1/3.)) +
               dqo.o;
 #else
       ABC.A = dqo.d * cos(wt) - 
               dqo.q * sin(wt) +
               dqo.o;
-      ABC.B = dqo.d * cos(wt - static_cast<T>(2.*PI/3.)) -
-              dqo.q * sin(wt - static_cast<T>(2.*PI/3.)) +
+      ABC.B = dqo.d * cos(wt - static_cast<T>(2.*PIx1/3.)) -
+              dqo.q * sin(wt - static_cast<T>(2.*PIx1/3.)) +
               dqo.o;
-      ABC.C = dqo.d * cos(wt + static_cast<T>(2.*PI/3.)) - 
-              dqo.q * sin(wt + static_cast<T>(2.*PI/3.)) +
+      ABC.C = dqo.d * cos(wt + static_cast<T>(2.*PIx1/3.)) - 
+              dqo.q * sin(wt + static_cast<T>(2.*PIx1/3.)) +
               dqo.o;
 #endif
       return ABC;
@@ -261,21 +262,21 @@ namespace clarkes{
       ABC.A = dqo.d * sin(wt) + 
               dqo.q * cos(wt) +
               dqo.o;
-      ABC.B = dqo.d * sin(wt - static_cast<T>(2.*PI/3.)) + 
-              dqo.q * cos(wt - static_cast<T>(2.*PI/3.)) +
+      ABC.B = dqo.d * sin(wt - static_cast<T>(2.*PIx1/3.)) + 
+              dqo.q * cos(wt - static_cast<T>(2.*PIx1/3.)) +
               dqo.o;
-      ABC.C = dqo.d * sin(wt + static_cast<T>(2.*PI/3.)) + 
-              dqo.q * cos(wt + static_cast<T>(2.*PI/3.)) +
+      ABC.C = dqo.d * sin(wt + static_cast<T>(2.*PIx1/3.)) + 
+              dqo.q * cos(wt + static_cast<T>(2.*PIx1/3.)) +
               dqo.o;
 #else
       ABC.A = dqo.d * cos(wt) - 
               dqo.q * sin(wt) +
               dqo.o;
-      ABC.B = dqo.d * cos(wt - static_cast<T>(2.*PI/3.)) -
-              dqo.q * sin(wt - static_cast<T>(2.*PI/3.)) +
+      ABC.B = dqo.d * cos(wt - static_cast<T>(2.*PIx1/3.)) -
+              dqo.q * sin(wt - static_cast<T>(2.*PIx1/3.)) +
               dqo.o;
-      ABC.C = dqo.d * cos(wt + static_cast<T>(2.*PI/3.)) - 
-              dqo.q * sin(wt + static_cast<T>(2.*PI/3.)) +
+      ABC.C = dqo.d * cos(wt + static_cast<T>(2.*PIx1/3.)) - 
+              dqo.q * sin(wt + static_cast<T>(2.*PIx1/3.)) +
               dqo.o;
 #endif
   }

@@ -40,8 +40,8 @@ namespace elec{
             ComplexExp<T> vectB = reim2exp(ComplexReIm<T>{s.B.alpha_get(), s.B.beta_get()});
             ComplexExp<T> vectC = reim2exp(ComplexReIm<T>{s.C.alpha_get(), s.C.beta_get()});
             
-            vectB *= ComplexExp<T>{1.0, 4.0/3.0*utl::PI};
-            vectC *= ComplexExp<T>{1.0, 2.0/3.0*utl::PI};
+            vectB *= ComplexExp<T>{1.0, 4.0/3.0*utl::PIx1};
+            vectC *= ComplexExp<T>{1.0, 2.0/3.0*utl::PIx1};
             
             ComplexExp<T>  reversSeqVec = T(1.0/3.0)*(vectA + vectB + vectC);
             
