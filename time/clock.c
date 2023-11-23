@@ -1,8 +1,9 @@
 #include "clock.h"
-#include <stdint.h>
+
 
 static time_t time_now = TIME_SEC(0.0);
 static int16_t sw_clock_alive = 0;
+
 
 //-------------------------------------------------------------------
 void clock_init()

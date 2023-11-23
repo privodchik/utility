@@ -859,7 +859,7 @@ class RMS final: public TFBase<T>{
     
     template<typename U>
     constexpr void config(U&& Ti){
-        m_I.config(std::forward<U>(Ti);
+        m_I.config(std::forward<U>(Ti));
     }
 
   private:

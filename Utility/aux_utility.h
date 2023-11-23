@@ -124,13 +124,14 @@ namespace AUX_UTILITY{
         return MAX(std::forward<T1>(v1), MAX(std::forward<T2>(v2), std::forward<Types>(args)...));
     }
     
-    
+        
     template <typename T1, typename T2>
     decltype(auto) MIN(T1&& v1, T2&& v2){
         return v1 <= v2 ? std::forward<T1>(v1) : std::forward<T2>(v2);
     }
     
     /**
+      * @defgroup nsAUX_UTILITY AUX_UTILITY Functions
       * @brief Find Min value
       * @param[in]        v1      universal reference to first variable
       * @param[in]        v2...   universal reference to package of variables
@@ -143,6 +144,7 @@ namespace AUX_UTILITY{
     
     
     /**
+      * @defgroup nsAUX_UTILITY AUX_UTILITY Functions
       * @brief Convert time from uSec to Sec
       * @param[in]      time_uSec       time in uSec
       * @return         out             time in Sec
@@ -198,6 +200,15 @@ namespace AUX_UTILITY{
     }
     
     /**
+      * @defgroup nsAUX_UTILITY AUX_UTILITY Functions
+      * @brief Estimate cos(th)
+      * @param[in]      th      angle, rad
+      * @return         out     cos, pu
+      */
+    
+    
+    /**
+      * @defgroup nsAUX_UTILITY AUX_UTILITY Functions
       * @brief Estimate absolute value
       * @param[in]      v       value
       * @return         out     abs
@@ -215,6 +226,7 @@ namespace AUX_UTILITY{
     
     
     /**
+      * @defgroup nsAUX_UTILITY AUX_UTILITY Functions
       * @brief Estimate atan(y/x)
       * @param[in]      y       value
       * @param[in]      x       value
