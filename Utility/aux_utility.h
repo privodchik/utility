@@ -58,7 +58,7 @@ constexpr std::size_t array_size(T (&)[N]){
   * @param[in] _inSignal input value
   * @param[in] _satPos rhs limit value
   * @param[in] _satNeg lhs limit value
-  * @param[out] saturated value
+  * @return out saturated value
   */
 
 template <typename T>
@@ -68,27 +68,67 @@ T saturate(T _inSignal, T _satPos, T _satNeg){
 }
 
 
+
+
+/**
+ * @defgroup nsAUX_UTILITY AUX_UTILITY Functions
+ */
+
 namespace AUX_UTILITY{
 
+    
+    /**
+      * @defgroup nsAUX_UTILITY AUX_UTILITY Functions
+      * @brief limit value
+      * @param[in,out]    _inSignal       pointer to a variable 
+      * @param[in]        _satPos         max value
+      * @param[in]        _satNeg         min value
+      */
+    
     template <typename T>
         void limit(T* _inSignal, T _satPos, T _satNeg){
             if (*_inSignal > _satPos ) *_inSignal = _satPos;
             else if (*_inSignal < _satNeg)*_inSignal = _satNeg;
         }
     
+    
+    /**
+      * @defgroup nsAUX_UTILITY AUX_UTILITY Functions
+      * @brief limit value
+      * @param[in]        v       reference to a variable 
+      * @param[in]        satP    max value
+      * @param[in]        satN    min value
+      * @return           out     limited value
+      */
+    
     template <typename T>
-    auto lim(T&& v, std::remove_reference_t<T> satP, std::remove_reference_t<T> satN){
-      return (v > satP) ? satP : (v < satN) ? satN : v;
+    constexpr auto lim(T& v, const T& satP, const T& satN){
+        return v = (v > satP) ? satP : (v < satN) ? satN : v;
     }
     
     
+    /**
+      * @defgroup nsAUX_UTILITY AUX_UTILITY Functions
+      * @brief Find Max value
+      * @param[in]        v1      universal reference to first variable
+      * @param[in]        v2      universal reference to second variable
+      * @return           out     max value or reference to max variable
+      */
     
     template <typename T1, typename T2>
     decltype(auto) MAX(T1&& v1, T2&& v2){
-        return v1 > v2 ? std::forward<T1>(v1) : std::forward<T2>(v2);
+        return v1 >= v2 ? std::forward<T1>(v1) : std::forward<T2>(v2);
     }
     
 
+    /**
+      * @defgroup nsAUX_UTILITY AUX_UTILITY Functions
+      * @brief Find Max value
+      * @param[in]        v1      universal reference to first variable
+      * @param[in]        v2...   universal reference to package of variables
+      * @return           out     max value or reference to max variable
+      */
+    
     template <typename T1, typename T2, typename... Types>
     decltype(auto) MAX(T1&& v1, T2&& v2, Types&&... args){
         return MAX(std::forward<T1>(v1), MAX(std::forward<T2>(v2), std::forward<Types>(args)...));
@@ -96,9 +136,36 @@ namespace AUX_UTILITY{
     
     
     /**
+      * @defgroup nsAUX_UTILITY AUX_UTILITY Functions
+      * @brief Find Min value
+      * @param[in]        v1      universal reference to first variable
+      * @param[in]        v2      universal reference to second variable
+      * @return           out     min value or reference to max variable
+      */
+    
+    template <typename T1, typename T2>
+    decltype(auto) MIN(T1&& v1, T2&& v2){
+        return v1 <= v2 ? std::forward<T1>(v1) : std::forward<T2>(v2);
+    }
+    
+    /**
+      * @defgroup nsAUX_UTILITY AUX_UTILITY Functions
+      * @brief Find Min value
+      * @param[in]        v1      universal reference to first variable
+      * @param[in]        v2...   universal reference to package of variables
+      * @return           out     min value or reference to max variable
+      */
+    template <typename T1, typename T2, typename... Types>
+    decltype(auto) MIN(T1&& v1, T2&& v2, Types&&... args){
+        return MIN(std::forward<T1>(v1), MIN(std::forward<T2>(v2), std::forward<Types>(args)...));
+    }
+    
+    
+    /**
+      * @defgroup nsAUX_UTILITY AUX_UTILITY Functions
       * @brief Convert time from uSec to Sec
-      * @param[in] time_uSec time in uSec
-      * @param[out] time in Sec
+      * @param[in]      time_uSec       time in uSec
+      * @return         out             time in Sec
       */        
     
     template<typename T>
@@ -108,9 +175,10 @@ namespace AUX_UTILITY{
                               
     
     /**
-      * @brief Estimate sinus of angle
-      * @param[in] v angle, rad
-      * @param[out] sinus, pu
+      * @defgroup nsAUX_UTILITY AUX_UTILITY Functions
+      * @brief Estimate sin(th)
+      * @param[in]      th      angle, rad
+      * @return         out     sin, pu
       */
     
     template<typename T, std::enable_if_t<std::is_same_v<T, double>, bool> = true>   
@@ -128,28 +196,53 @@ namespace AUX_UTILITY{
         return IXsin(v);
     }
     
+    
     /**
+      * @defgroup nsAUX_UTILITY AUX_UTILITY Functions
+      * @brief Estimate cos(th)
+      * @param[in]      th      angle, rad
+      * @return         out     cos, pu
+      */
+    
+    template<typename T, std::enable_if_t<std::is_same_v<T, double>, bool> = true>   
+    auto cos(const T& v){
+        return std::cos(v);
+    }
+    
+    template<typename T, std::enable_if_t<std::is_same_v<T, float>, bool> = true>   
+    auto cos(const T& v){
+        return arm_cos_f32(v);
+    }
+                        
+    template<typename T, std::enable_if_t<std::is_same_v<typename T::ix_t, typename T::ix_t>, bool> = true>   
+    auto cos(const T& v){
+        return IXcos(v);
+    }
+    
+    /**
+      * @defgroup nsAUX_UTILITY AUX_UTILITY Functions
       * @brief Estimate absolute value
-      * @param[in] v value
-      * @param[out] abs
+      * @param[in]      v       value
+      * @return         out     abs
       */
     
     template<typename T, std::enable_if_t<std::is_arithmetic_v<T>, bool> = true>   
     auto abs(const T& v){
-        return std::sin(v);
+        return std::abs(v);
     }
     
     template<typename T, std::enable_if_t<std::is_same_v<typename T::ix_t, typename T::ix_t>, bool> = true>   
     auto abs(const T& v){
-        return IXsin(v);
+        return IXabs(v);
     }
     
     
     /**
+      * @defgroup nsAUX_UTILITY AUX_UTILITY Functions
       * @brief Estimate atan(y/x)
-      * @param[in] y value
-      * @param[in] x value
-      * @param[out] angle, rad
+      * @param[in]      y       value
+      * @param[in]      x       value
+      * @return         out     angle, rad
       */
     
     template<typename T, std::enable_if_t<std::is_arithmetic_v<T>, bool> = true>   
@@ -161,9 +254,6 @@ namespace AUX_UTILITY{
     auto atan2(const T& y, const T& x){
         return IXatan2(y, x);
     }
-    
-    
-    
 }
 
 
