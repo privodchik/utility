@@ -12,6 +12,9 @@
 #include <utility>
 #include "user_constants.h"
 #include <time.h>
+#include <cmath>
+#include "IXmathLib.hpp"
+#include "arm_math.h"
 
 template<class T>
 T set_bit(T _bitNo){
@@ -100,8 +103,66 @@ namespace AUX_UTILITY{
     
     template<typename T>
     constexpr T uSecToSec(time_t time_uSec){
-        return static_cast<T>(time_uSec * 0.000'001);
+        return static_cast<T>(time_uSec * 0.000001);
     }
+                              
+    
+    /**
+      * @brief Estimate sinus of angle
+      * @param[in] v angle, rad
+      * @param[out] sinus, pu
+      */
+    
+    template<typename T, std::enable_if_t<std::is_same_v<T, double>, bool> = true>   
+    auto sin(const T& v){
+        return std::sin(v);
+    }
+    
+    template<typename T, std::enable_if_t<std::is_same_v<T, float>, bool> = true>   
+    auto sin(const T& v){
+        return arm_sin_f32(v);
+    }
+                        
+    template<typename T, std::enable_if_t<std::is_same_v<typename T::ix_t, typename T::ix_t>, bool> = true>   
+    auto sin(const T& v){
+        return IXsin(v);
+    }
+    
+    /**
+      * @brief Estimate absolute value
+      * @param[in] v value
+      * @param[out] abs
+      */
+    
+    template<typename T, std::enable_if_t<std::is_arithmetic_v<T>, bool> = true>   
+    auto abs(const T& v){
+        return std::sin(v);
+    }
+    
+    template<typename T, std::enable_if_t<std::is_same_v<typename T::ix_t, typename T::ix_t>, bool> = true>   
+    auto abs(const T& v){
+        return IXsin(v);
+    }
+    
+    
+    /**
+      * @brief Estimate atan(y/x)
+      * @param[in] y value
+      * @param[in] x value
+      * @param[out] angle, rad
+      */
+    
+    template<typename T, std::enable_if_t<std::is_arithmetic_v<T>, bool> = true>   
+    auto atan2(const T& y, const T& x){
+        return std::atan2(y, x);
+    }
+    
+    template<typename T, std::enable_if_t<std::is_same_v<typename T::ix_t, typename T::ix_t>, bool> = true>   
+    auto atan2(const T& y, const T& x){
+        return IXatan2(y, x);
+    }
+    
+    
     
 }
 

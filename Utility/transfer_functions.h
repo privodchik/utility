@@ -97,9 +97,9 @@ class TFBase{
     virtual ~TFBase() = 0;
 
   protected:
-    constexpr decltype(auto) out_limit(){
+    constexpr const T& out_limit(){
         m_yk = (m_yk > m_satPos ? m_satPos : (m_yk < m_satNeg ? m_satNeg : m_yk));
-        return const_cast<const T&>(m_yk);
+        return m_yk;
     }
   public:
     constexpr const T& out_get() const{return m_yk;}
@@ -206,7 +206,7 @@ class Filter final: public TFBase<T>{
 
     template<typename U>
     constexpr decltype(auto) out_est(U&& xk){
-        TFBase<T>::m_yk = m_k1 * xk + m_k2 * TFBase<T>::m_yk;
+        TFBase<T>::m_yk = m_k1 * std::forward<U>(xk) + m_k2 * TFBase<T>::m_yk;
         return TFBase<T>::out_limit();
     }
 
@@ -292,7 +292,7 @@ class Integrator final: public TFBase<T>{
     
     template<typename U>
     constexpr decltype(auto) out_est(U&& xk){
-        TFBase<T>::m_yk += m_TsDivTi * xk;
+        TFBase<T>::m_yk += m_TsDivTi * std::forward<U>(xk);
         return TFBase<T>::out_limit();
     }
 };
@@ -377,14 +377,14 @@ class TrapezIntegrator final: public TFBase<T>{
       
     template<typename U>
     constexpr void config(U&& Ti){
-        m_TsDivTi = TFBase<T>::m_Ts / Ti;
+        m_TsDivTi = TFBase<T>::m_Ts / std::forward<U>(Ti);
     }
 
     
     template<typename U>
     constexpr decltype(auto) out_est(U&& xk){
         TFBase<T>::m_yk += (m_TsDivTi / std::remove_reference_t<U>(2.0) * (xk + m_xk_1));
-        m_xk_1 = xk;
+        m_xk_1 = std::forward<U>(xk);
         return TFBase<T>::out_limit();
     }
 
@@ -495,7 +495,7 @@ class SimpsonIntegrator final: public TFBase<T>{
         TFBase<T>::m_yk += S;
 
         m_xk_2 = m_xk_1;
-        m_xk_1 = xk;
+        m_xk_1 = std::forward<U>(xk);
         
         return TFBase<T>::out_limit();
     }
@@ -591,7 +591,7 @@ class PIreg final: public TFBase<T>{
       
     template<typename U>
     constexpr void config(U&& K, U&& Ti){
-        m_K = K;
+        m_K = std::forward<U>(K);
         m_I.config(std::forward<U>(Ti));
     }
 
@@ -681,7 +681,7 @@ class Difference final: public TFBase<T>{
     template<typename U>  
     constexpr decltype(auto) out_est(U&& yk){
         TFBase<T>::m_yk = yk - m_yk_1;
-        m_yk_1 = yk;
+        m_yk_1 = std::forward<U>(yk);
         return TFBase<T>::out_limit();
     }
 };
@@ -765,7 +765,7 @@ class Differentiator final: public TFBase<T>{
         template<typename U>
         constexpr decltype(auto) out_est(U&& xk){
           TFBase<T>::m_yk = m_1DivTs * (xk - m_xk_1);
-          m_xk_1 = xk;
+          m_xk_1 = std::forward<U>(xk);
           return TFBase<T>::out_limit();
         }
 
@@ -859,24 +859,30 @@ class RMS final: public TFBase<T>{
     
     template<typename U>
     constexpr void config(U&& Ti){
-        m_I.config(std::forward<U>(Ti));
+        m_I.config(std::forward<U>(Ti);
     }
 
   private:
     
-    template<typename U>
-    constexpr decltype(auto) sqrt_helper(U v){
+    template<typename U, std::enable_if_t<std::is_same_v<U, double>, bool> = true>
+    constexpr decltype(auto) sqrt_helper(const U& v){
         return std::sqrt(v);
     }
     
-    ///*constexpr*/ decltype(auto) sqrt_helper(iqCpp::iq v){
-    //    return (iqCpp::CPP_IQsqrt(v));
-    //}
+    template<typename U, std::enable_if_t<std::is_same_v<U, float>, bool> = true>
+    constexpr decltype(auto) sqrt_helper(const U& v){
+        return arm_sqrt_f32(v);
+    }
+    
+    template<typename U, std::enable_if_t<
+        std::is_same_v<std::void_t<typename U::ix_t>, void>, bool> = true> 
+    constexpr decltype(auto) sqrt_helper(const U& v){
+        return IXsqrt(v);
+    }
     
   public:
     
-    template<typename U>
-    constexpr decltype(auto) out_est(U&& xk){
+    constexpr decltype(auto) out_est(const T& xk){
         m_I.out_est(xk * xk);
         m_internalTime += TFBase<T>::m_Ts;
         if (m_internalTime > T{1}/m_f){
@@ -904,8 +910,7 @@ class AVG{
   public:
     constexpr AVG() : yk(0){}
     
-    template<typename U>
-    constexpr decltype(auto) out_est(U&& xk){
+    constexpr decltype(auto) out_est(const T& xk){
         return yk = (xk + yk) / T(2.0);
     }
     
