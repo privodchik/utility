@@ -8,6 +8,10 @@
 #include "stdint.h"
 #include <math.h>
 
+#ifdef __cplusplus
+extern "C"{
+#endif //__cplusplus    
+
 //-------------------------------------------------------------------
 typedef int32_t iq_t;
 
@@ -331,6 +335,12 @@ extern iq21_t _IQ21abs(iq21_t x);
 #define IQ2toF(A)       ((float)(A)*(0.25))
 #define IQ1toF(A)       ((float)(A)*(0.5))
 #define IQ0toF(A)       ((float)(A)*(1))
+
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus    
+
 
 
 #endif /* IQMATH_INT32_MCU_H */

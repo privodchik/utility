@@ -10,7 +10,8 @@
 
 #include "CTheta.h"
 #include "arm_math.h"
-#include "IQmathCPP.h"
+#include "aux_utility.h"
+#include "IXmathLib.hpp"
 #include <type_traits>
 #include <utility>
 
@@ -35,12 +36,7 @@ class CGrid{
    
         
        T out_est(){
-          if constexpr(std::is_floating_point_v<T>){
-              return currentValue = amp * arm_sin_f32(wt.out_est(w)); // for "arm_math.h"; FIXME!
-          }
-          else{
-              return currentValue = amp * CPP_IQsin(wt.out_est(w));
-          }
+           return currentValue = amp * AUX_UTILITY::sin(wt.out_est(w));
       }
       
       const T& out_get() const {return currentValue;}

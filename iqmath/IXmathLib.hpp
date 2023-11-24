@@ -13,6 +13,461 @@
 #include <cmath>
 
 
+extern "C" {
+    //*****************************************************************************
+    //
+    // Convert an IQ number to a floating point value.
+    //
+    //*****************************************************************************
+    extern float _IQ30toF(int32_t A);
+    extern float _IQ29toF(int32_t A);
+    extern float _IQ28toF(int32_t A);
+    extern float _IQ27toF(int32_t A);
+    extern float _IQ26toF(int32_t A);
+    extern float _IQ25toF(int32_t A);
+    extern float _IQ24toF(int32_t A);
+    extern float _IQ23toF(int32_t A);
+    extern float _IQ22toF(int32_t A);
+    extern float _IQ21toF(int32_t A);
+    extern float _IQ20toF(int32_t A);
+    extern float _IQ19toF(int32_t A);
+    extern float _IQ18toF(int32_t A);
+    extern float _IQ17toF(int32_t A);
+    extern float _IQ16toF(int32_t A);
+    extern float _IQ15toF(int32_t A);
+    extern float _IQ14toF(int32_t A);
+    extern float _IQ13toF(int32_t A);
+    extern float _IQ12toF(int32_t A);
+    extern float _IQ11toF(int32_t A);
+    extern float _IQ10toF(int32_t A);
+    extern float _IQ9toF(int32_t A);
+    extern float _IQ8toF(int32_t A);
+    extern float _IQ7toF(int32_t A);
+    extern float _IQ6toF(int32_t A);
+    extern float _IQ5toF(int32_t A);
+    extern float _IQ4toF(int32_t A);
+    extern float _IQ3toF(int32_t A);
+    extern float _IQ2toF(int32_t A);
+    extern float _IQ1toF(int32_t A);
+    
+    
+    //*****************************************************************************
+    //
+    // Computes the sin of an IQ number.
+    //
+    //*****************************************************************************
+    extern int32_t _IQ29sin(int32_t A);
+    extern int32_t _IQ28sin(int32_t A);
+    extern int32_t _IQ27sin(int32_t A);
+    extern int32_t _IQ26sin(int32_t A);
+    extern int32_t _IQ25sin(int32_t A);
+    extern int32_t _IQ24sin(int32_t A);
+    extern int32_t _IQ23sin(int32_t A);
+    extern int32_t _IQ22sin(int32_t A);
+    extern int32_t _IQ21sin(int32_t A);
+    extern int32_t _IQ20sin(int32_t A);
+    extern int32_t _IQ19sin(int32_t A);
+    extern int32_t _IQ18sin(int32_t A);
+    extern int32_t _IQ17sin(int32_t A);
+    extern int32_t _IQ16sin(int32_t A);
+    extern int32_t _IQ15sin(int32_t A);
+    extern int32_t _IQ14sin(int32_t A);
+    extern int32_t _IQ13sin(int32_t A);
+    extern int32_t _IQ12sin(int32_t A);
+    extern int32_t _IQ11sin(int32_t A);
+    extern int32_t _IQ10sin(int32_t A);
+    extern int32_t _IQ9sin(int32_t A);
+    extern int32_t _IQ8sin(int32_t A);
+    extern int32_t _IQ7sin(int32_t A);
+    extern int32_t _IQ6sin(int32_t A);
+    extern int32_t _IQ5sin(int32_t A);
+    extern int32_t _IQ4sin(int32_t A);
+    extern int32_t _IQ3sin(int32_t A);
+    extern int32_t _IQ2sin(int32_t A);
+    extern int32_t _IQ1sin(int32_t A);
+    
+    
+    //*****************************************************************************
+    //
+    // Computes the sin of an IQ number, using cycles per unit instead of radians.
+    //
+    //*****************************************************************************
+    extern int32_t _IQ30sinPU(int32_t A);
+    extern int32_t _IQ29sinPU(int32_t A);
+    extern int32_t _IQ28sinPU(int32_t A);
+    extern int32_t _IQ27sinPU(int32_t A);
+    extern int32_t _IQ26sinPU(int32_t A);
+    extern int32_t _IQ25sinPU(int32_t A);
+    extern int32_t _IQ24sinPU(int32_t A);
+    extern int32_t _IQ23sinPU(int32_t A);
+    extern int32_t _IQ22sinPU(int32_t A);
+    extern int32_t _IQ21sinPU(int32_t A);
+    extern int32_t _IQ20sinPU(int32_t A);
+    extern int32_t _IQ19sinPU(int32_t A);
+    extern int32_t _IQ18sinPU(int32_t A);
+    extern int32_t _IQ17sinPU(int32_t A);
+    extern int32_t _IQ16sinPU(int32_t A);
+    extern int32_t _IQ15sinPU(int32_t A);
+    extern int32_t _IQ14sinPU(int32_t A);
+    extern int32_t _IQ13sinPU(int32_t A);
+    extern int32_t _IQ12sinPU(int32_t A);
+    extern int32_t _IQ11sinPU(int32_t A);
+    extern int32_t _IQ10sinPU(int32_t A);
+    extern int32_t _IQ9sinPU(int32_t A);
+    extern int32_t _IQ8sinPU(int32_t A);
+    extern int32_t _IQ7sinPU(int32_t A);
+    extern int32_t _IQ6sinPU(int32_t A);
+    extern int32_t _IQ5sinPU(int32_t A);
+    extern int32_t _IQ4sinPU(int32_t A);
+    extern int32_t _IQ3sinPU(int32_t A);
+    extern int32_t _IQ2sinPU(int32_t A);
+    extern int32_t _IQ1sinPU(int32_t A);
+    
+    
+    //*****************************************************************************
+    //
+    // Computes the arcsin of an IQ number.
+    //
+    //*****************************************************************************
+    extern int32_t _IQ29asin(int32_t A);
+    extern int32_t _IQ28asin(int32_t A);
+    extern int32_t _IQ27asin(int32_t A);
+    extern int32_t _IQ26asin(int32_t A);
+    extern int32_t _IQ25asin(int32_t A);
+    extern int32_t _IQ24asin(int32_t A);
+    extern int32_t _IQ23asin(int32_t A);
+    extern int32_t _IQ22asin(int32_t A);
+    extern int32_t _IQ21asin(int32_t A);
+    extern int32_t _IQ20asin(int32_t A);
+    extern int32_t _IQ19asin(int32_t A);
+    extern int32_t _IQ18asin(int32_t A);
+    extern int32_t _IQ17asin(int32_t A);
+    extern int32_t _IQ16asin(int32_t A);
+    extern int32_t _IQ15asin(int32_t A);
+    extern int32_t _IQ14asin(int32_t A);
+    extern int32_t _IQ13asin(int32_t A);
+    extern int32_t _IQ12asin(int32_t A);
+    extern int32_t _IQ11asin(int32_t A);
+    extern int32_t _IQ10asin(int32_t A);
+    extern int32_t _IQ9asin(int32_t A);
+    extern int32_t _IQ8asin(int32_t A);
+    extern int32_t _IQ7asin(int32_t A);
+    extern int32_t _IQ6asin(int32_t A);
+    extern int32_t _IQ5asin(int32_t A);
+    extern int32_t _IQ4asin(int32_t A);
+    extern int32_t _IQ3asin(int32_t A);
+    extern int32_t _IQ2asin(int32_t A);
+    extern int32_t _IQ1asin(int32_t A);
+    
+    
+    //*****************************************************************************
+    //
+    // Computes the cos of an IQ number.
+    //
+    //*****************************************************************************
+    extern int32_t _IQ29cos(int32_t A);
+    extern int32_t _IQ28cos(int32_t A);
+    extern int32_t _IQ27cos(int32_t A);
+    extern int32_t _IQ26cos(int32_t A);
+    extern int32_t _IQ25cos(int32_t A);
+    extern int32_t _IQ24cos(int32_t A);
+    extern int32_t _IQ23cos(int32_t A);
+    extern int32_t _IQ22cos(int32_t A);
+    extern int32_t _IQ21cos(int32_t A);
+    extern int32_t _IQ20cos(int32_t A);
+    extern int32_t _IQ19cos(int32_t A);
+    extern int32_t _IQ18cos(int32_t A);
+    extern int32_t _IQ17cos(int32_t A);
+    extern int32_t _IQ16cos(int32_t A);
+    extern int32_t _IQ15cos(int32_t A);
+    extern int32_t _IQ14cos(int32_t A);
+    extern int32_t _IQ13cos(int32_t A);
+    extern int32_t _IQ12cos(int32_t A);
+    extern int32_t _IQ11cos(int32_t A);
+    extern int32_t _IQ10cos(int32_t A);
+    extern int32_t _IQ9cos(int32_t A);
+    extern int32_t _IQ8cos(int32_t A);
+    extern int32_t _IQ7cos(int32_t A);
+    extern int32_t _IQ6cos(int32_t A);
+    extern int32_t _IQ5cos(int32_t A);
+    extern int32_t _IQ4cos(int32_t A);
+    extern int32_t _IQ3cos(int32_t A);
+    extern int32_t _IQ2cos(int32_t A);
+    extern int32_t _IQ1cos(int32_t A);
+    
+    
+    //*****************************************************************************
+    //
+    // Computes the cos of an IQ number, using cycles per unit instead of radians.
+    //
+    //*****************************************************************************
+    extern int32_t _IQ30cosPU(int32_t A);
+    extern int32_t _IQ29cosPU(int32_t A);
+    extern int32_t _IQ28cosPU(int32_t A);
+    extern int32_t _IQ27cosPU(int32_t A);
+    extern int32_t _IQ26cosPU(int32_t A);
+    extern int32_t _IQ25cosPU(int32_t A);
+    extern int32_t _IQ24cosPU(int32_t A);
+    extern int32_t _IQ23cosPU(int32_t A);
+    extern int32_t _IQ22cosPU(int32_t A);
+    extern int32_t _IQ21cosPU(int32_t A);
+    extern int32_t _IQ20cosPU(int32_t A);
+    extern int32_t _IQ19cosPU(int32_t A);
+    extern int32_t _IQ18cosPU(int32_t A);
+    extern int32_t _IQ17cosPU(int32_t A);
+    extern int32_t _IQ16cosPU(int32_t A);
+    extern int32_t _IQ15cosPU(int32_t A);
+    extern int32_t _IQ14cosPU(int32_t A);
+    extern int32_t _IQ13cosPU(int32_t A);
+    extern int32_t _IQ12cosPU(int32_t A);
+    extern int32_t _IQ11cosPU(int32_t A);
+    extern int32_t _IQ10cosPU(int32_t A);
+    extern int32_t _IQ9cosPU(int32_t A);
+    extern int32_t _IQ8cosPU(int32_t A);
+    extern int32_t _IQ7cosPU(int32_t A);
+    extern int32_t _IQ6cosPU(int32_t A);
+    extern int32_t _IQ5cosPU(int32_t A);
+    extern int32_t _IQ4cosPU(int32_t A);
+    extern int32_t _IQ3cosPU(int32_t A);
+    extern int32_t _IQ2cosPU(int32_t A);
+    extern int32_t _IQ1cosPU(int32_t A);
+    
+    
+    //*****************************************************************************
+    //
+    // Computes the arctan of a coordinate specified by two IQ numbers.
+    //
+    //*****************************************************************************
+    extern int32_t _IQ29atan2(int32_t A, int32_t B);
+    extern int32_t _IQ28atan2(int32_t A, int32_t B);
+    extern int32_t _IQ27atan2(int32_t A, int32_t B);
+    extern int32_t _IQ26atan2(int32_t A, int32_t B);
+    extern int32_t _IQ25atan2(int32_t A, int32_t B);
+    extern int32_t _IQ24atan2(int32_t A, int32_t B);
+    extern int32_t _IQ23atan2(int32_t A, int32_t B);
+    extern int32_t _IQ22atan2(int32_t A, int32_t B);
+    extern int32_t _IQ21atan2(int32_t A, int32_t B);
+    extern int32_t _IQ20atan2(int32_t A, int32_t B);
+    extern int32_t _IQ19atan2(int32_t A, int32_t B);
+    extern int32_t _IQ18atan2(int32_t A, int32_t B);
+    extern int32_t _IQ17atan2(int32_t A, int32_t B);
+    extern int32_t _IQ16atan2(int32_t A, int32_t B);
+    extern int32_t _IQ15atan2(int32_t A, int32_t B);
+    extern int32_t _IQ14atan2(int32_t A, int32_t B);
+    extern int32_t _IQ13atan2(int32_t A, int32_t B);
+    extern int32_t _IQ12atan2(int32_t A, int32_t B);
+    extern int32_t _IQ11atan2(int32_t A, int32_t B);
+    extern int32_t _IQ10atan2(int32_t A, int32_t B);
+    extern int32_t _IQ9atan2(int32_t A, int32_t B);
+    extern int32_t _IQ8atan2(int32_t A, int32_t B);
+    extern int32_t _IQ7atan2(int32_t A, int32_t B);
+    extern int32_t _IQ6atan2(int32_t A, int32_t B);
+    extern int32_t _IQ5atan2(int32_t A, int32_t B);
+    extern int32_t _IQ4atan2(int32_t A, int32_t B);
+    extern int32_t _IQ3atan2(int32_t A, int32_t B);
+    extern int32_t _IQ2atan2(int32_t A, int32_t B);
+    extern int32_t _IQ1atan2(int32_t A, int32_t B);
+    
+    
+    //*****************************************************************************
+    //
+    // Computes the arctan of a coordinate specified by two IQ numbers, returning
+    // the value in cycles per unit instead of radians.
+    //
+    //*****************************************************************************
+    extern int32_t _IQ30atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ29atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ28atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ27atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ26atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ25atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ24atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ23atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ22atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ21atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ20atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ19atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ18atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ17atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ16atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ15atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ14atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ13atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ12atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ11atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ10atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ9atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ8atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ7atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ6atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ5atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ4atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ3atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ2atan2PU(int32_t A, int32_t B);
+    extern int32_t _IQ1atan2PU(int32_t A, int32_t B);
+    
+    
+    //*****************************************************************************
+    //
+    // Computes the square root of an IQ number.
+    //
+    //*****************************************************************************
+    extern int32_t _IQ30sqrt(int32_t A);
+    extern int32_t _IQ29sqrt(int32_t A);
+    extern int32_t _IQ28sqrt(int32_t A);
+    extern int32_t _IQ27sqrt(int32_t A);
+    extern int32_t _IQ26sqrt(int32_t A);
+    extern int32_t _IQ25sqrt(int32_t A);
+    extern int32_t _IQ24sqrt(int32_t A);
+    extern int32_t _IQ23sqrt(int32_t A);
+    extern int32_t _IQ22sqrt(int32_t A);
+    extern int32_t _IQ21sqrt(int32_t A);
+    extern int32_t _IQ20sqrt(int32_t A);
+    extern int32_t _IQ19sqrt(int32_t A);
+    extern int32_t _IQ18sqrt(int32_t A);
+    extern int32_t _IQ17sqrt(int32_t A);
+    extern int32_t _IQ16sqrt(int32_t A);
+    extern int32_t _IQ15sqrt(int32_t A);
+    extern int32_t _IQ14sqrt(int32_t A);
+    extern int32_t _IQ13sqrt(int32_t A);
+    extern int32_t _IQ12sqrt(int32_t A);
+    extern int32_t _IQ11sqrt(int32_t A);
+    extern int32_t _IQ10sqrt(int32_t A);
+    extern int32_t _IQ9sqrt(int32_t A);
+    extern int32_t _IQ8sqrt(int32_t A);
+    extern int32_t _IQ7sqrt(int32_t A);
+    extern int32_t _IQ6sqrt(int32_t A);
+    extern int32_t _IQ5sqrt(int32_t A);
+    extern int32_t _IQ4sqrt(int32_t A);
+    extern int32_t _IQ3sqrt(int32_t A);
+    extern int32_t _IQ2sqrt(int32_t A);
+    extern int32_t _IQ1sqrt(int32_t A);
+    
+    
+    //*****************************************************************************
+    //
+    // Computes 1 over the square root of an IQ number.
+    //
+    //*****************************************************************************
+    extern int32_t _IQ30isqrt(int32_t A);
+    extern int32_t _IQ29isqrt(int32_t A);
+    extern int32_t _IQ28isqrt(int32_t A);
+    extern int32_t _IQ27isqrt(int32_t A);
+    extern int32_t _IQ26isqrt(int32_t A);
+    extern int32_t _IQ25isqrt(int32_t A);
+    extern int32_t _IQ24isqrt(int32_t A);
+    extern int32_t _IQ23isqrt(int32_t A);
+    extern int32_t _IQ22isqrt(int32_t A);
+    extern int32_t _IQ21isqrt(int32_t A);
+    extern int32_t _IQ20isqrt(int32_t A);
+    extern int32_t _IQ19isqrt(int32_t A);
+    extern int32_t _IQ18isqrt(int32_t A);
+    extern int32_t _IQ17isqrt(int32_t A);
+    extern int32_t _IQ16isqrt(int32_t A);
+    extern int32_t _IQ15isqrt(int32_t A);
+    extern int32_t _IQ14isqrt(int32_t A);
+    extern int32_t _IQ13isqrt(int32_t A);
+    extern int32_t _IQ12isqrt(int32_t A);
+    extern int32_t _IQ11isqrt(int32_t A);
+    extern int32_t _IQ10isqrt(int32_t A);
+    extern int32_t _IQ9isqrt(int32_t A);
+    extern int32_t _IQ8isqrt(int32_t A);
+    extern int32_t _IQ7isqrt(int32_t A);
+    extern int32_t _IQ6isqrt(int32_t A);
+    extern int32_t _IQ5isqrt(int32_t A);
+    extern int32_t _IQ4isqrt(int32_t A);
+    extern int32_t _IQ3isqrt(int32_t A);
+    extern int32_t _IQ2isqrt(int32_t A);
+    extern int32_t _IQ1isqrt(int32_t A);
+    
+    
+    //*****************************************************************************
+    //
+    // Computes e^x of an IQ number.
+    //
+    //*****************************************************************************
+    extern int32_t _IQ30exp(int32_t A);
+    extern int32_t _IQ29exp(int32_t A);
+    extern int32_t _IQ28exp(int32_t A);
+    extern int32_t _IQ27exp(int32_t A);
+    extern int32_t _IQ26exp(int32_t A);
+    extern int32_t _IQ25exp(int32_t A);
+    extern int32_t _IQ24exp(int32_t A);
+    extern int32_t _IQ23exp(int32_t A);
+    extern int32_t _IQ22exp(int32_t A);
+    extern int32_t _IQ21exp(int32_t A);
+    extern int32_t _IQ20exp(int32_t A);
+    extern int32_t _IQ19exp(int32_t A);
+    extern int32_t _IQ18exp(int32_t A);
+    extern int32_t _IQ17exp(int32_t A);
+    extern int32_t _IQ16exp(int32_t A);
+    extern int32_t _IQ15exp(int32_t A);
+    extern int32_t _IQ14exp(int32_t A);
+    extern int32_t _IQ13exp(int32_t A);
+    extern int32_t _IQ12exp(int32_t A);
+    extern int32_t _IQ11exp(int32_t A);
+    extern int32_t _IQ10exp(int32_t A);
+    extern int32_t _IQ9exp(int32_t A);
+    extern int32_t _IQ8exp(int32_t A);
+    extern int32_t _IQ7exp(int32_t A);
+    extern int32_t _IQ6exp(int32_t A);
+    extern int32_t _IQ5exp(int32_t A);
+    extern int32_t _IQ4exp(int32_t A);
+    extern int32_t _IQ3exp(int32_t A);
+    extern int32_t _IQ2exp(int32_t A);
+    extern int32_t _IQ1exp(int32_t A);
+    
+    
+    //*****************************************************************************
+    //
+    // Computes 2^x of an IQ number.
+    //
+    //*****************************************************************************
+    extern int32_t _IQ30exp2(int32_t A);
+    extern int32_t _IQ29exp2(int32_t A);
+    extern int32_t _IQ28exp2(int32_t A);
+    extern int32_t _IQ27exp2(int32_t A);
+    extern int32_t _IQ26exp2(int32_t A);
+    extern int32_t _IQ25exp2(int32_t A);
+    extern int32_t _IQ24exp2(int32_t A);
+    extern int32_t _IQ23exp2(int32_t A);
+    extern int32_t _IQ22exp2(int32_t A);
+    extern int32_t _IQ21exp2(int32_t A);
+    extern int32_t _IQ20exp2(int32_t A);
+    extern int32_t _IQ19exp2(int32_t A);
+    extern int32_t _IQ18exp2(int32_t A);
+    extern int32_t _IQ17exp2(int32_t A);
+    extern int32_t _IQ16exp2(int32_t A);
+    extern int32_t _IQ15exp2(int32_t A);
+    extern int32_t _IQ14exp2(int32_t A);
+    extern int32_t _IQ13exp2(int32_t A);
+    extern int32_t _IQ12exp2(int32_t A);
+    extern int32_t _IQ11exp2(int32_t A);
+    extern int32_t _IQ10exp2(int32_t A);
+    extern int32_t _IQ9exp2(int32_t A);
+    extern int32_t _IQ8exp2(int32_t A);
+    extern int32_t _IQ7exp2(int32_t A);
+    extern int32_t _IQ6exp2(int32_t A);
+    extern int32_t _IQ5exp2(int32_t A);
+    extern int32_t _IQ4exp2(int32_t A);
+    extern int32_t _IQ3exp2(int32_t A);
+    extern int32_t _IQ2exp2(int32_t A);
+    extern int32_t _IQ1exp2(int32_t A);
+
+
+} //extern "C"
+
+
+
+
+
+
+
+
+
+
+
+
 namespace ix_ns{
     constexpr const float PIx2 = 3.14159265358979 * 2.0;
 } //namespace ix_ns
@@ -31,7 +486,9 @@ struct IX{
   T val;
   
   IX() : val(0){}
-  IX(T A) : val(A * (1 << I)){}
+  
+  template<typename U>
+  IX(U A) : val(static_cast<T>(A * (1 << I))){}
   
   IX(const IX& A) : val(A.val){}
   
@@ -281,7 +738,7 @@ float IXtoF(const T& A){
 
 template<typename T, int I>
 struct fxdpt2float_helper{
-  static typename T::Type handler(const T& v){
+  static float handler(const T& v){
       return v.val / (1 << I);
   }
 };
@@ -289,8 +746,17 @@ struct fxdpt2float_helper{
 // Partial specialization for frac = 21
 template<typename T>
 struct fxdpt2float_helper<T, 21>{
-  static typename T::Type handler(const T& A){
-      return _IQ21toF(A.val);
+  static float handler(const T& A){
+      float t_ = _IQ21toF(A.val);
+      return  t_;
+  }
+};
+
+template<typename T>
+struct fxdpt2float_helper<T, 22>{
+  static float handler(const T& A){
+      float t_ = _IQ22toF(A.val);
+      return  t_;
   }
 };
 
@@ -990,24 +1456,12 @@ auto IXabs(const T& A){
     return B;
 }
 
-template<typename T, int I>
-struct IXabs_helper{
-    static auto handler(const T& A);
-};
-
-template<typename T>
-struct IXabs_helper<T, 21>{
-    static auto handler(const T& A){
-        T B;
-        B.val = _IQ21abs(A.val);
-        return B;
-    }
-};
-
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
 auto IXabs(const T& A){
-    return IXabs_helper<T, T::fractional>::handler(A);
+    T B;
+    B.val = A.val < 0 ? -A.val : A.val;
+    return B;
 }
 
 
