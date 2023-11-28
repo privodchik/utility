@@ -485,17 +485,17 @@ struct IX{
   
   T val;
   
-  IX() : val(0){}
+  constexpr IX() : val(0){}
   
   template<typename U>
-  IX(U A) : val(static_cast<T>(A * (1 << I))){}
+  constexpr IX(U A) : val(static_cast<T>(A * (1 << I))){}
   
-  IX(const IX& A) : val(A.val){}
+  constexpr IX(const IX& A) : val(A.val){}
   
   //
   // Assignment operator
   //
-  IX& operator=(const IX& A){
+  constexpr IX& operator=(const IX& A){
       val = A.val;
       return(*this);
   };
@@ -503,38 +503,38 @@ struct IX{
   //
   // Arithmetic operators +=, -=, *=, /= 
   //
-  IX& operator+=(const IX& A){
-    val = A.val;
+  constexpr IX& operator+=(const IX& A){
+    val += A.val;
     return (*this);
   }
   
-  IX& operator-=(const IX& A){
+  constexpr IX& operator-=(const IX& A){
     val -= A.val;
     return (*this);
   }
   
   
   template<typename U, std::enable_if_t<std::is_integral_v<typename U::Type>, bool> = true>
-  U& operator*=(const U& A){
+  constexpr U& operator*=(const U& A){
       val = mul_op_helper<U, U::fractional>::handler(*this, A);
       return (*this);
   }
   
   template<typename U, std::enable_if_t<std::is_floating_point_v<typename U::Type>, bool> = true>
-  U& operator*=(const U& A){
+  constexpr U& operator*=(const U& A){
       val *= A.val;
       return (*this);
   }
   
   
   template<typename U, std::enable_if_t<std::is_integral_v<typename U::Type>, bool> = true>
-  U& operator/=(const U& A){
+  constexpr U& operator/=(const U& A){
       val = div_op_helper<U, U::fractional>::handler(*this, A);
       return (*this);
   }
   
   template<typename U, std::enable_if_t<std::is_floating_point_v<typename U::Type>, bool> = true>
-  U& operator/=(const U& A){
+  constexpr U& operator/=(const U& A){
       val /= A.val;
       return (*this);
   }
@@ -545,38 +545,38 @@ struct IX{
   //
   
   template<typename U = T, std::enable_if_t<std::is_integral_v<U>, bool> = true>
-  IX& operator&=(const long& A){
+  constexpr IX& operator&=(const long& A){
      val &= A;
      return (*this);
   }
   
   template<typename U = T, std::enable_if_t<std::is_integral_v<U>, bool> = true>
-  IX& operator&=(const IX& A){
+  constexpr IX& operator&=(const IX& A){
      val &= A.val;
      return (*this);
   }
   
   template<typename U = T, std::enable_if_t<std::is_integral_v<U>, bool> = true>
-  IX& operator|=(const long& A){
+  constexpr IX& operator|=(const long& A){
       val |= A;
       return (*this);
   }
   
   template<typename U = T, std::enable_if_t<std::is_integral_v<U>, bool> = true>
-  IX& operator|=(const IX& A){
+  constexpr IX& operator|=(const IX& A){
       val |= A.val;
       return (*this);
   }
   
   
   template<typename U = T, std::enable_if_t<std::is_integral_v<U>, bool> = true>
-  IX& operator^=(const long& A){
+  constexpr IX& operator^=(const long& A){
       val ^= A;
       return (*this);
   }
   
   template<typename U = T, std::enable_if_t<std::is_integral_v<U>, bool> = true>
-  IX& operator^=(const IX& A){
+  constexpr IX& operator^=(const IX& A){
       val ^= A.val;
       return (*this);
   }
@@ -620,7 +620,7 @@ struct IX{
 // +
 //
 template<typename T, int I>
-IX<T, I> operator+(const IX<T, I>& A, const IX<T, I>& B){
+constexpr IX<T, I> operator+(const IX<T, I>& A, const IX<T, I>& B){
   IX<T, I> C = A;
   C += B;
   return C;
@@ -630,7 +630,7 @@ IX<T, I> operator+(const IX<T, I>& A, const IX<T, I>& B){
 // -
 //
 template<typename T, int I>
-IX<T, I> operator-(const IX<T, I>& A, const IX<T, I>& B){
+constexpr IX<T, I> operator-(const IX<T, I>& A, const IX<T, I>& B){
   IX<T, I> C = A;
   C -= B;
   return C;
@@ -640,7 +640,7 @@ IX<T, I> operator-(const IX<T, I>& A, const IX<T, I>& B){
 // *
 //
 template<typename T, int I>
-IX<T, I> operator*(const IX<T, I>& A, const IX<T, I>& B){
+constexpr IX<T, I> operator*(const IX<T, I>& A, const IX<T, I>& B){
     IX<T, I> C = A;
     C *= B;
     return C;
@@ -651,7 +651,7 @@ IX<T, I> operator*(const IX<T, I>& A, const IX<T, I>& B){
 // /
 //
 template<typename T, int I>
-IX<T, I> operator/(const IX<T, I>& A, const IX<T, I>& B){
+constexpr IX<T, I> operator/(const IX<T, I>& A, const IX<T, I>& B){
     IX<T, I> C = A;
     C /= B;
     return C;
@@ -660,42 +660,42 @@ IX<T, I> operator/(const IX<T, I>& A, const IX<T, I>& B){
 //  Logical operators
 //
 template<typename T, int I>
-bool operator==(const IX<T, I>& A, const IX<T, I>& B){
+constexpr bool operator==(const IX<T, I>& A, const IX<T, I>& B){
     return A.val == B.val;
 }
 
 template<typename T, int I>
-bool operator!=(const IX<T, I>& A, const IX<T, I>& B){
+constexpr bool operator!=(const IX<T, I>& A, const IX<T, I>& B){
     return !(A.val == B.val);
 }
 
 template<typename T, int I>
-bool operator<(const IX<T, I>& A, const IX<T, I>& B){
+constexpr bool operator<(const IX<T, I>& A, const IX<T, I>& B){
     return A.val < B.val;
 }
 
 template<typename T, int I>
-bool operator>(const IX<T, I>& A, const IX<T, I>& B){
+constexpr bool operator>(const IX<T, I>& A, const IX<T, I>& B){
     return B < A;
 }
 
 template<typename T, int I>
-bool operator<=(const IX<T, I>& A, const IX<T, I>& B){
-    return !(B > A);
+constexpr bool operator<=(const IX<T, I>& A, const IX<T, I>& B){
+    return B > A;
 }
 
 template<typename T, int I>
-bool operator>=(const IX<T, I>& A, const IX<T, I>& B){
-    return !(B < A);
+constexpr bool operator>=(const IX<T, I>& A, const IX<T, I>& B){
+    return B < A;
 }
 
 template<typename T, int I>
-bool operator&&(const IX<T, I>& A, const IX<T, I>& B){
+constexpr bool operator&&(const IX<T, I>& A, const IX<T, I>& B){
     return A.val && B.val;
 }
 
 template<typename T, int I>
-bool operator||(const IX<T, I>& A, const IX<T, I>& B){
+constexpr bool operator||(const IX<T, I>& A, const IX<T, I>& B){
     return A.val || B.val;
 }
 
@@ -704,21 +704,21 @@ bool operator||(const IX<T, I>& A, const IX<T, I>& B){
 // Bitwise operators &, |, ^
 //
 template<typename T, int I, std::enable_if_t<std::is_integral_v<T>, bool> =true>
-IX<T, I> operator&(const IX<T, I>& A, const long& B){
+constexpr IX<T, I> operator&(const IX<T, I>& A, const long& B){
   IX<T, I> C = A;
   C &= B;
   return C;
 }
 
 template<typename T, int I, std::enable_if_t<std::is_integral_v<T>, bool> =true>
-IX<T, I> operator|(const IX<T, I>& A, const long& B){
+constexpr IX<T, I> operator|(const IX<T, I>& A, const long& B){
   IX<T, I> C = A;
   C |= B;
   return C;
 }
 
 template<typename T, int I, std::enable_if_t<std::is_integral_v<T>, bool> =true>
-IX<T, I> operator^(const IX<T, I>& A, const long& B){
+constexpr IX<T, I> operator^(const IX<T, I>& A, const long& B){
   IX<T, I> C = A;
   C ^= B;
   return C;
@@ -732,7 +732,7 @@ IX<T, I> operator^(const IX<T, I>& A, const long& B){
 //*****************************************************************************
 
 template<typename T, std::enable_if_t<std::is_floating_point_v<typename T::Type>, bool> = true>
-float IXtoF(const T& A){
+constexpr float IXtoF(const T& A){
     return A.val;
 }
 
@@ -761,7 +761,7 @@ struct fxdpt2float_helper<T, 22>{
 };
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-float IXtoF(const T& A){
+constexpr float IXtoF(const T& A){
     return fxdpt2float_helper<T, T::fractional>::handler(A);
 }
 
@@ -773,12 +773,12 @@ float IXtoF(const T& A){
 //*****************************************************************************
 
 template<typename T, std::enable_if_t<std::is_floating_point_v<typename T::Type>, bool> = true>
-auto IXsat(const T& A, const T& Pos, const T& Neg){
+constexpr auto IXsat(const T& A, const T& Pos, const T& Neg){
     return A > Pos ? Pos : (A < Neg ? Neg : A);
 }
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-auto IXsat(const T& A, const T& Pos, const T& Neg){
+constexpr auto IXsat(const T& A, const T& Pos, const T& Neg){
     T B;
     B.val = _IQsat(A.val, Pos.val, Neg.val);
     return B;
@@ -791,12 +791,12 @@ auto IXsat(const T& A, const T& Pos, const T& Neg){
 //
 //*****************************************************************************
 template<typename T, std::enable_if_t<std::is_floating_point_v<typename T::Type>, bool> = true>
-long IXint(const T& A){
+constexpr long IXint(const T& A){
     return A.val; 
 }
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-long IXint(const T& A){
+constexpr long IXint(const T& A){
     return A.val >> T::fractional; 
 }
 
@@ -808,7 +808,7 @@ long IXint(const T& A){
 //*****************************************************************************
 
 template<typename T, std::enable_if_t<std::is_floating_point_v<typename T::Type>, bool> = true>
-float IXfrac(const T& A){
+constexpr float IXfrac(const T& A){
      return static_cast<float>(A.val - static_cast<long>(A.val));
 }
 
@@ -828,7 +828,7 @@ struct IXfrac_helper<T, 21>{
 };
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-float IXfrac(const T& A){
+constexpr float IXfrac(const T& A){
     return IXfrac_helper<T, T::fractional>::handler(A);
 }
 
@@ -839,7 +839,7 @@ float IXfrac(const T& A){
 //
 //*****************************************************************************
 template<typename T, std::enable_if_t<std::is_floating_point_v<typename T::Type>, bool> = true>
-auto IXrmpy(const T& A, const T& B){
+constexpr auto IXrmpy(const T& A, const T& B){
     return A * B;
 }
 
@@ -861,7 +861,7 @@ struct IXrmpy_helper<T, 21>{
 
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-auto IXrmpy(const T& A, const T& B){
+constexpr auto IXrmpy(const T& A, const T& B){
     return IXrmpy_helper<T, T::fractional>::handler(A, B);
 }
 
@@ -872,7 +872,7 @@ auto IXrmpy(const T& A, const T& B){
 //
 //*****************************************************************************
 template<typename T, std::enable_if_t<std::is_floating_point_v<typename T::Type>, bool> = true>
-auto IXrsmpy(const T& A, const T& B);
+constexpr auto IXrsmpy(const T& A, const T& B);
 
 
 template<typename T, int I>
@@ -892,7 +892,7 @@ struct IXrsmpy_helper<T, 21>{
 
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-auto IXrsmpy(const T& A, const T& B){
+constexpr auto IXrsmpy(const T& A, const T& B){
     return IXrsmpy_helper<T, T::fractional>::handler(A, B);
 }
 
@@ -904,7 +904,7 @@ auto IXrsmpy(const T& A, const T& B){
 //*****************************************************************************
 
 template<typename T>
-auto IXmpyI32(const T& A, long B){
+constexpr auto IXmpyI32(const T& A, long B){
     T C;
     C.val = A.val * static_cast<typename T::Type>(B);
     return C;
@@ -916,7 +916,7 @@ auto IXmpyI32(const T& A, long B){
 //
 //*****************************************************************************
 template<typename T, std::enable_if_t<std::is_floating_point_v<typename T::Type>, bool> = true>
-long IXmpyI32int(const T& A, long B){
+constexpr long IXmpyI32int(const T& A, long B){
     return static_cast<long>(A.val * static_cast<typename T::Type>(B));
 }
 
@@ -936,7 +936,7 @@ struct IXmpyI32int_helper<T, 21>{
 
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-long IXmpyI32int(const T& A, long B){
+constexpr long IXmpyI32int(const T& A, long B){
     return IXmpyI32int_helper<T, T::fractional>::handler(A, B);
 }
 
@@ -948,7 +948,7 @@ long IXmpyI32int(const T& A, long B){
 //
 //*****************************************************************************
 template<typename T, std::enable_if_t<std::is_floating_point_v<typename T::Type>, bool> = true>
-auto IXmpyI32frac(const T& A, long B){
+constexpr auto IXmpyI32frac(const T& A, long B){
     auto c = A.val * static_cast<typename T::Type>(B); 
     return c - static_cast<typename T::Type>(static_cast<long>(c)); 
 }
@@ -969,7 +969,7 @@ struct IXmpyI32frac_helper<T, 21>{
 
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-auto IXmpyI32frac(const T& A, long B){
+constexpr auto IXmpyI32frac(const T& A, long B){
     return IXmpyI32frac_helper<T, T::fractional>::handler(A, B);
 }
 
@@ -980,7 +980,7 @@ auto IXmpyI32frac(const T& A, long B){
 //
 //*****************************************************************************
 template<typename T, std::enable_if_t<std::is_same_v<typename T::Type, double>, bool> = true >
-auto IXsin(const T& A){
+constexpr auto IXsin(const T& A){
     T C;
     C.val = std::sin(A.val);
     return C;
@@ -988,7 +988,7 @@ auto IXsin(const T& A){
 
 
 template<typename T, std::enable_if_t<std::is_same_v<typename T::Type, float>, bool> = true >
-auto IXsin(const T& A){
+constexpr auto IXsin(const T& A){
     T C;
     C.val = arm_sin_f32(A.val);
     return C;
@@ -1010,7 +1010,7 @@ struct IXsin_helper<T, 21>{
 };
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-auto IXsin(const T& A){
+constexpr auto IXsin(const T& A){
     return IXsin_helper<T, T::fractional>::handler(A);
 }
 
@@ -1021,7 +1021,7 @@ auto IXsin(const T& A){
 //
 //*****************************************************************************
 template<typename T, std::enable_if_t<std::is_same_v<typename T::Type, double>, bool> = true >
-auto IXsinPU(const T& A){
+constexpr auto IXsinPU(const T& A){
     T C;
     C.val = std::sin(A.val * ix_ns::PIx2);
     return C;
@@ -1029,7 +1029,7 @@ auto IXsinPU(const T& A){
 
 
 template<typename T, std::enable_if_t<std::is_same_v<typename T::Type, float>, bool> = true >
-auto IXsinPU(const T& A){
+constexpr auto IXsinPU(const T& A){
     T C;
     C.val = arm_sin_f32(A.val * ix_ns::PIx2);
     return C;
@@ -1051,7 +1051,7 @@ struct IXsinPU_helper<T, 21>{
 };
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-auto IXsinPU(const T& A){
+constexpr auto IXsinPU(const T& A){
     return IXsinPU_helper<T, T::fractional>::handler(A);
 }
 
@@ -1063,7 +1063,7 @@ auto IXsinPU(const T& A){
 //
 //*****************************************************************************
 template<typename T, std::enable_if_t<std::is_floating_point_v<typename T::Type>, bool> = true>
-auto IXasin(const T& A){
+constexpr auto IXasin(const T& A){
     T B;
     B.val = std::asin(A.val);
     return B;
@@ -1084,7 +1084,7 @@ struct IXasin_helper<T, 21>{
 };
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-auto IXasin(const T& A){
+constexpr auto IXasin(const T& A){
     return IXasin_helper<T, T::fractional>::handler(A);
 }
 
@@ -1095,7 +1095,7 @@ auto IXasin(const T& A){
 //
 //*****************************************************************************
 template<typename T, std::enable_if_t<std::is_same_v<typename T::Type, double>, bool> = true >
-auto IXcos(const T& A){
+constexpr auto IXcos(const T& A){
     T C;
     C.val = std::cos(A.val);
     return C;
@@ -1103,7 +1103,7 @@ auto IXcos(const T& A){
 
 
 template<typename T, std::enable_if_t<std::is_same_v<typename T::Type, float>, bool> = true >
-auto IXcos(const T& A){
+constexpr auto IXcos(const T& A){
     T C;
     C.val = arm_cos_f32(A.val);
     return C;
@@ -1125,7 +1125,7 @@ struct IXcos_helper<T, 21>{
 };
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-auto IXcos(const T& A){
+constexpr auto IXcos(const T& A){
     return IXcos_helper<T, T::fractional>::handler(A);
 }
 
@@ -1135,7 +1135,7 @@ auto IXcos(const T& A){
 //
 //*****************************************************************************
 template<typename T, std::enable_if_t<std::is_same_v<typename T::Type, double>, bool> = true >
-auto IXcosPU(const T& A){
+constexpr auto IXcosPU(const T& A){
     T C;
     C.val = std::cos(A.val * ix_ns::PIx2);
     return C;
@@ -1143,7 +1143,7 @@ auto IXcosPU(const T& A){
 
 
 template<typename T, std::enable_if_t<std::is_same_v<typename T::Type, float>, bool> = true >
-auto IXcosPU(const T& A){
+constexpr auto IXcosPU(const T& A){
     T C;
     C.val = arm_cos_f32(A.val * ix_ns::PIx2);
     return C;
@@ -1165,7 +1165,7 @@ struct IXcosPU_helper<T, 21>{
 };
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-auto IXcosPU(const T& A){
+constexpr auto IXcosPU(const T& A){
     return IXcosPU_helper<T, T::fractional>::handler(A);
 }
 
@@ -1176,7 +1176,7 @@ auto IXcosPU(const T& A){
 //
 //*****************************************************************************
 template<typename T, std::enable_if_t<std::is_floating_point_v<typename T::Type>, bool> = true>
-auto IXacos(const T& A){
+constexpr auto IXacos(const T& A){
     T B;
     B.val = std::acos(A.val);
     return B;
@@ -1197,7 +1197,7 @@ struct IXacos_helper<T, 21>{
 };
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-auto IXacos(const T& A){
+constexpr auto IXacos(const T& A){
     return IXacos_helper<T, T::fractional>::handler(A);
 }
 
@@ -1208,7 +1208,7 @@ auto IXacos(const T& A){
 //
 //*****************************************************************************
 template<typename T, std::enable_if_t<std::is_floating_point_v<typename T::Type>, bool> = true>
-auto IXatan2(const T& A, const T& B){
+constexpr auto IXatan2(const T& A, const T& B){
     T C;
     C.val = std::atan2(A.val, B.val);
     return C;
@@ -1229,7 +1229,7 @@ struct IXatan2_helper<T, 21>{
 };
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-auto IXatan2(const T& A, const T& B){
+constexpr auto IXatan2(const T& A, const T& B){
     return IXatan2_helper<T, T::fractional>::handler(A, B);
 }
 
@@ -1241,7 +1241,7 @@ auto IXatan2(const T& A, const T& B){
 //
 //*****************************************************************************
 template<typename T, std::enable_if_t<std::is_floating_point_v<typename T::Type>, bool> = true>
-auto IXatan2PU(const T& A, const T& B){
+constexpr auto IXatan2PU(const T& A, const T& B){
     T C;
     C.val = std::atan2(A.val * ix_ns::PIx2, B.val * ix_ns::PIx2);
     return C;
@@ -1262,7 +1262,7 @@ struct IXatan2PU_helper<T, 21>{
 };
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-auto IXatan2PU(const T& A, const T& B){
+constexpr auto IXatan2PU(const T& A, const T& B){
     return IXatan2PU_helper<T, T::fractional>::handler(A, B);
 }
 
@@ -1273,14 +1273,14 @@ auto IXatan2PU(const T& A, const T& B){
 //
 //*****************************************************************************
 template<typename T, std::enable_if_t<std::is_same_v<typename T::Type, double>, bool> = true >
-auto IXsqrt(const T& A){
+constexpr auto IXsqrt(const T& A){
     T B;
     B.val = std::sqrt(A.val);
     return B;
 }
 
 template<typename T, std::enable_if_t<std::is_same_v<typename T::Type, float>, bool> = true >
-auto IXsqrt(const T& A){
+constexpr auto IXsqrt(const T& A){
     T B;
     B.val = arm_sqrt_f32(A.val);
     return B;
@@ -1301,7 +1301,7 @@ struct IXsqrt_helper<T, 21>{
 };
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-auto IXsqrt(const T& A){
+constexpr auto IXsqrt(const T& A){
     return IXsqrt_helper<T, T::fractional>::handler(A);
 }
 
@@ -1313,14 +1313,14 @@ auto IXsqrt(const T& A){
 //
 //*****************************************************************************
 template<typename T, std::enable_if_t<std::is_same_v<typename T::Type, double>, bool> = true >
-auto IXisqrt(const T& A){
+constexpr auto IXisqrt(const T& A){
     T B;
     B.val = std::sqrt(static_cast<typename T::Type>(1.0) / A.val);
     return B;
 }
 
 template<typename T, std::enable_if_t<std::is_same_v<typename T::Type, float>, bool> = true >
-auto IXisqrt(const T& A){
+constexpr auto IXisqrt(const T& A){
     T B;
     B.val = arm_sqrt_f32(A.val);
     B.val = 1.0f / B.val;
@@ -1342,7 +1342,7 @@ struct IXisqrt_helper<T, 21>{
 };
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-auto IXisqrt(const T& A){
+constexpr auto IXisqrt(const T& A){
     return IXisqrt_helper<T, T::fractional>::handler(A);
 }
 
@@ -1353,7 +1353,7 @@ auto IXisqrt(const T& A){
 //
 //*****************************************************************************
 template<typename T, std::enable_if_t<std::is_floating_point_v<typename T::Type>, bool> = true>
-auto IXexp(const T& A){
+constexpr auto IXexp(const T& A){
     T B;
     B.val = std::exp(A.val);
     return B;
@@ -1374,7 +1374,7 @@ struct IXexp_helper<T, 21>{
 };
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-auto IXexp(const T& A){
+constexpr auto IXexp(const T& A){
     return IXexp_helper<T, T::fractional>::handler(A);
 }
 
@@ -1385,7 +1385,7 @@ auto IXexp(const T& A){
 //
 //*****************************************************************************
 template<typename T, std::enable_if_t<std::is_floating_point_v<typename T::Type>, bool> = true>
-auto IXexp2(const T& A){
+constexpr auto IXexp2(const T& A){
     T B;
     B.val = std::exp(A.val);
     return B;
@@ -1406,7 +1406,7 @@ struct IXexp2_helper<T, 21>{
 };
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-auto IXexp2(const T& A){
+constexpr auto IXexp2(const T& A){
     return IXexp2_helper<T, T::fractional>::handler(A);
 }
 
@@ -1418,7 +1418,7 @@ auto IXexp2(const T& A){
 //
 //*****************************************************************************
 template<typename T, std::enable_if_t<std::is_floating_point_v<typename T::Type>, bool> = true>
-auto IXmag(const T& A, const T& B){
+constexpr auto IXmag(const T& A, const T& B){
     T C;
     C.val = std::sqrt(A.val * A.val, B.val * B.val);
     return C;
@@ -1439,7 +1439,7 @@ struct IXmag_helper<T, 21>{
 };
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-auto IXmag(const T& A){
+constexpr auto IXmag(const T& A){
     return IXmag_helper<T, T::fractional>::handler(A);
 }
 
@@ -1450,7 +1450,7 @@ auto IXmag(const T& A){
 //
 //*****************************************************************************
 template<typename T, std::enable_if_t<std::is_floating_point_v<typename T::Type>, bool> = true>
-auto IXabs(const T& A){
+constexpr auto IXabs(const T& A){
     T B;
     B.val = std::abs(A.val);
     return B;
@@ -1458,7 +1458,7 @@ auto IXabs(const T& A){
 
 
 template<typename T, std::enable_if_t<std::is_integral_v<typename T::Type>, bool> = true>
-auto IXabs(const T& A){
+constexpr auto IXabs(const T& A){
     T B;
     B.val = A.val < 0 ? -A.val : A.val;
     return B;

@@ -23,7 +23,7 @@ class CTheta{
   public:
     
     constexpr CTheta(T Ts, T outVal = static_cast<T>(0)) : 
-        m_th(Ts, T(1.0), T(utl::PIx2), -T(utl::PIx2))
+        m_th(Ts, T(1.0), T(utl::PIx2), T(-utl::PIx2))
       {
           m_th.out_set(std::move(outVal));
       }
@@ -44,8 +44,8 @@ class CTheta{
   private:
     
     constexpr void saturation(T wt){
-        if (wt >= static_cast<T>(utl::PIx1)) wt -= static_cast<T>(utl::PIx2);
-        else if (wt <= static_cast<T>(-utl::PIx1)) wt += static_cast<T>(utl::PIx2);
+        if (wt >= T(utl::PIx1)) wt -= T(utl::PIx2);
+        else if (wt <= T(-utl::PIx1)) wt += T(utl::PIx2);
         m_th.out_set(std::move(wt));
     }
     

@@ -154,7 +154,8 @@ namespace AUX_UTILITY{
     constexpr T uSecToSec(time_t time_uSec){
         return static_cast<T>(time_uSec * 0.000001);
     }
-                              
+                        
+    
     
     /**
       * @brief Estimate sin(th)
