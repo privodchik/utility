@@ -11,6 +11,7 @@
 #include <type_traits>
 #include "arm_math.h"
 #include <cmath>
+#include "tailor.h"
 
 
 extern "C" {
@@ -49,6 +50,156 @@ extern "C" {
     extern float _IQ3toF(int32_t A);
     extern float _IQ2toF(int32_t A);
     extern float _IQ1toF(int32_t A);
+    
+    
+    //*****************************************************************************
+    //
+    // Divides two IQ numbers.
+    //
+    //*****************************************************************************
+    extern int32_t _IQ30div(int32_t A, int32_t B);
+    extern int32_t _IQ29div(int32_t A, int32_t B);
+    extern int32_t _IQ28div(int32_t A, int32_t B);
+    extern int32_t _IQ27div(int32_t A, int32_t B);
+    extern int32_t _IQ26div(int32_t A, int32_t B);
+    extern int32_t _IQ25div(int32_t A, int32_t B);
+    extern int32_t _IQ24div(int32_t A, int32_t B);
+    extern int32_t _IQ23div(int32_t A, int32_t B);
+    extern int32_t _IQ22div(int32_t A, int32_t B);
+    extern int32_t _IQ21div(int32_t A, int32_t B);
+    extern int32_t _IQ20div(int32_t A, int32_t B);
+    extern int32_t _IQ19div(int32_t A, int32_t B);
+    extern int32_t _IQ18div(int32_t A, int32_t B);
+    extern int32_t _IQ17div(int32_t A, int32_t B);
+    extern int32_t _IQ16div(int32_t A, int32_t B);
+    extern int32_t _IQ15div(int32_t A, int32_t B);
+    extern int32_t _IQ14div(int32_t A, int32_t B);
+    extern int32_t _IQ13div(int32_t A, int32_t B);
+    extern int32_t _IQ12div(int32_t A, int32_t B);
+    extern int32_t _IQ11div(int32_t A, int32_t B);
+    extern int32_t _IQ10div(int32_t A, int32_t B);
+    extern int32_t _IQ9div(int32_t A, int32_t B);
+    extern int32_t _IQ8div(int32_t A, int32_t B);
+    extern int32_t _IQ7div(int32_t A, int32_t B);
+    extern int32_t _IQ6div(int32_t A, int32_t B);
+    extern int32_t _IQ5div(int32_t A, int32_t B);
+    extern int32_t _IQ4div(int32_t A, int32_t B);
+    extern int32_t _IQ3div(int32_t A, int32_t B);
+    extern int32_t _IQ2div(int32_t A, int32_t B);
+    extern int32_t _IQ1div(int32_t A, int32_t B);
+    
+    
+    //*****************************************************************************
+    //
+    // Multiplies two IQ numbers.
+    //
+    //*****************************************************************************
+    extern int32_t _IQ30mpy(int32_t A, int32_t B);
+    extern int32_t _IQ29mpy(int32_t A, int32_t B);
+    extern int32_t _IQ28mpy(int32_t A, int32_t B);
+    extern int32_t _IQ27mpy(int32_t A, int32_t B);
+    extern int32_t _IQ26mpy(int32_t A, int32_t B);
+    extern int32_t _IQ25mpy(int32_t A, int32_t B);
+    extern int32_t _IQ24mpy(int32_t A, int32_t B);
+    extern int32_t _IQ23mpy(int32_t A, int32_t B);
+    extern int32_t _IQ22mpy(int32_t A, int32_t B);
+    extern int32_t _IQ21mpy(int32_t A, int32_t B);
+    extern int32_t _IQ20mpy(int32_t A, int32_t B);
+    extern int32_t _IQ19mpy(int32_t A, int32_t B);
+    extern int32_t _IQ18mpy(int32_t A, int32_t B);
+    extern int32_t _IQ17mpy(int32_t A, int32_t B);
+    extern int32_t _IQ16mpy(int32_t A, int32_t B);
+    extern int32_t _IQ15mpy(int32_t A, int32_t B);
+    extern int32_t _IQ14mpy(int32_t A, int32_t B);
+    extern int32_t _IQ13mpy(int32_t A, int32_t B);
+    extern int32_t _IQ12mpy(int32_t A, int32_t B);
+    extern int32_t _IQ11mpy(int32_t A, int32_t B);
+    extern int32_t _IQ10mpy(int32_t A, int32_t B);
+    extern int32_t _IQ9mpy(int32_t A, int32_t B);
+    extern int32_t _IQ8mpy(int32_t A, int32_t B);
+    extern int32_t _IQ7mpy(int32_t A, int32_t B);
+    extern int32_t _IQ6mpy(int32_t A, int32_t B);
+    extern int32_t _IQ5mpy(int32_t A, int32_t B);
+    extern int32_t _IQ4mpy(int32_t A, int32_t B);
+    extern int32_t _IQ3mpy(int32_t A, int32_t B);
+    extern int32_t _IQ2mpy(int32_t A, int32_t B);
+    extern int32_t _IQ1mpy(int32_t A, int32_t B);
+    
+    
+    //*****************************************************************************
+    //
+    // Multiplies two IQ numbers, with rounding.
+    //
+    //*****************************************************************************
+    extern int32_t _IQ30rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ29rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ28rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ27rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ26rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ25rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ24rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ23rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ22rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ21rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ20rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ19rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ18rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ17rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ16rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ15rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ14rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ13rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ12rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ11rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ10rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ9rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ8rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ7rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ6rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ5rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ4rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ3rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ2rmpy(int32_t A, int32_t B);
+    extern int32_t _IQ1rmpy(int32_t A, int32_t B);
+    
+    
+    //*****************************************************************************
+    //
+    // Multiplies two IQ numbers, with rounding and saturation.
+    //
+    //*****************************************************************************
+    extern int32_t _IQ30rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ29rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ28rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ27rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ26rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ25rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ24rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ23rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ22rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ21rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ20rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ19rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ18rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ17rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ16rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ15rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ14rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ13rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ12rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ11rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ10rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ9rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ8rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ7rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ6rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ5rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ4rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ3rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ2rsmpy(int32_t A, int32_t B);
+    extern int32_t _IQ1rsmpy(int32_t A, int32_t B);
+    
+    
     
     
     //*****************************************************************************
@@ -499,7 +650,8 @@ struct IX{
       val = A.val;
       return(*this);
   };
-      
+  
+  
   //
   // Arithmetic operators +=, -=, *=, /= 
   //
@@ -636,6 +788,15 @@ constexpr IX<T, I> operator-(const IX<T, I>& A, const IX<T, I>& B){
   return C;
 }
 
+
+template<typename T, int I>
+constexpr IX<T, I> operator-(const IX<T, I>& A){
+  IX<T, I> B;
+  B.val = - A.val;
+  return B;
+}
+
+
 //
 // *
 //
@@ -738,7 +899,7 @@ constexpr float IXtoF(const T& A){
 
 template<typename T, int I>
 struct fxdpt2float_helper{
-  static float handler(const T& v){
+  constexpr static float handler(const T& v){
       return v.val / (1 << I);
   }
 };
@@ -746,7 +907,7 @@ struct fxdpt2float_helper{
 // Partial specialization for frac = 21
 template<typename T>
 struct fxdpt2float_helper<T, 21>{
-  static float handler(const T& A){
+  constexpr static float handler(const T& A){
       float t_ = _IQ21toF(A.val);
       return  t_;
   }
@@ -754,7 +915,7 @@ struct fxdpt2float_helper<T, 21>{
 
 template<typename T>
 struct fxdpt2float_helper<T, 22>{
-  static float handler(const T& A){
+  constexpr static float handler(const T& A){
       float t_ = _IQ22toF(A.val);
       return  t_;
   }

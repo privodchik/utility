@@ -7,8 +7,9 @@
 
 #include <stdint.h>
 #include <cmath>
+#include "aux_utility.h"
 
-#define ROTATING_FRAME_90 0
+#define ROTATING_FRAME_90 1
 
 
 namespace clarkes{
@@ -66,19 +67,7 @@ namespace clarkes{
   template<typename T>
   abo_t<T> ABC2abo(const ABC_t<T>& ABC){
       abo_t<T> abo;
-      #if ROTATING_FRAME_90
-      abo.b = static_cast<T>(1./3.)*(
-              static_cast<T>(2.0) * ABC.A -
-              ABC.B -
-              ABC.C);
-      
-      abo.a = -static_cast<T>(1./SQRT3)*(
-              0 +
-              ABC.B -
-              ABC.C);
-      
-      abo.o = static_cast<T>(1./3.)*(ABC.A + ABC.B + ABC.C);
-      #else
+
       abo.a = static_cast<T>(1./3.)*(
               static_cast<T>(2.0) * ABC.A -
               ABC.B -
@@ -90,7 +79,6 @@ namespace clarkes{
               ABC.C);
       
       abo.o = static_cast<T>(1./3.)*(ABC.A + ABC.B + ABC.C);
-      #endif //#if ROTATING_FRAME_90
       
       return abo;
   }
@@ -119,17 +107,6 @@ namespace clarkes{
 
       ABC_t<T> ABC;
       
-      #if ROTATING_FRAME_90
-      ABC.A = abo.b + abo.o;
-      ABC.B = static_cast<T>(1.0/2.0)*(
-              - abo.b 
-              - static_cast<T>(SQRT3)*abo.a
-              + abo.o);
-      ABC.C = static_cast<T>(1.0/2.0)*(
-              - abo.b 
-              + static_cast<T>(SQRT3)*abo.a
-              + abo.o); 
-      #else
       ABC.A = abo.a + abo.o;
       ABC.B = static_cast<T>(1.0/2.0)*(
               - abo.a 
@@ -139,7 +116,6 @@ namespace clarkes{
               - abo.a 
               - static_cast<T>(SQRT3)*abo.b
               + abo.o); 
-      #endif // #if ROTATING_FRAME_90
       return ABC;
   }
   
@@ -164,26 +140,26 @@ namespace clarkes{
       dqo_t<T> dqo;
 #if ROTATING_FRAME_90
       dqo.d = static_cast<T>(2./3.)*(
-               ABC.A * sin(wt) +
-               ABC.B * sin(wt - static_cast<T>(2./3.*PIx1)) +
-               ABC.C * sin(wt + static_cast<T>(2./3.*PIx1)));
+               ABC.A * AUX_UTILITY::sin(wt) +
+               ABC.B * AUX_UTILITY::sin(wt - static_cast<T>(2./3.*PIx1)) +
+               ABC.C * AUX_UTILITY::sin(wt + static_cast<T>(2./3.*PIx1)));
       
       dqo.q = static_cast<T>(2./3.)*(
-              ABC.A * cos(wt) +
-              ABC.B * cos(wt - static_cast<T>(2./3.*PIx1)) +
-              ABC.C * cos(wt + static_cast<T>(2./3.*PIx1)));
+              ABC.A * AUX_UTILITY::cos(wt) +
+              ABC.B * AUX_UTILITY::cos(wt - static_cast<T>(2./3.*PIx1)) +
+              ABC.C * AUX_UTILITY::cos(wt + static_cast<T>(2./3.*PIx1)));
       
       dqo.o = static_cast<T>(1./3.)*(ABC.A + ABC.B + ABC.C);
 #else      
       dqo.d = static_cast<T>(2./3.)*(
-               ABC.A * cos(wt) +
-               ABC.B * cos(wt - static_cast<T>(2./3.*PIx1)) +
-               ABC.C * cos(wt + static_cast<T>(2./3.*PIx1)));
+               ABC.A * AUX_UTILITY::cos(wt) +
+               ABC.B * AUX_UTILITY::cos(wt - static_cast<T>(2./3.*PIx1)) +
+               ABC.C * AUX_UTILITY::cos(wt + static_cast<T>(2./3.*PIx1)));
       
       dqo.q = static_cast<T>(-2./3.)*(
-              ABC.A * sin(wt) +
-              ABC.B * sin(wt - static_cast<T>(2./3.*PIx1)) +
-              ABC.C * sin(wt + static_cast<T>(2./3.*PIx1)));
+              ABC.A * AUX_UTILITY::sin(wt) +
+              ABC.B * AUX_UTILITY::sin(wt - static_cast<T>(2./3.*PIx1)) +
+              ABC.C * AUX_UTILITY::sin(wt + static_cast<T>(2./3.*PIx1)));
       
       dqo.o = static_cast<T>(1./3.)*(ABC.A + ABC.B + ABC.C);
 #endif
@@ -198,26 +174,26 @@ namespace clarkes{
   void ABC2dqo(ABC_t<T>& ABC, dqo_t<T>& dqo, T wt){
 #if ROTATING_FRAME_90
       dqo.d = static_cast<T>(2./3.)*(
-               ABC.A * sin(wt) +
-               ABC.B * sin(wt - static_cast<T>(2./3.*PIx1)) +
-               ABC.C * sin(wt + static_cast<T>(2./3.*PIx1)));
+               ABC.A * AUX_UTILITY::sin(wt) +
+               ABC.B * AUX_UTILITY::sin(wt - static_cast<T>(2./3.*PIx1)) +
+               ABC.C * AUX_UTILITY::sin(wt + static_cast<T>(2./3.*PIx1)));
       
       dqo.q = static_cast<T>(2./3.)*(
-              ABC.A * cos(wt) +
-              ABC.B * cos(wt - static_cast<T>(2./3.*PIx1)) +
-              ABC.C * cos(wt + static_cast<T>(2./3.*PIx1)));
+              ABC.A * AUX_UTILITY::cos(wt) +
+              ABC.B * AUX_UTILITY::cos(wt - static_cast<T>(2./3.*PIx1)) +
+              ABC.C * AUX_UTILITY::cos(wt + static_cast<T>(2./3.*PIx1)));
       
       dqo.o = static_cast<T>(1./3.)*(ABC.A + ABC.B + ABC.C);
 #else      
       dqo.d = static_cast<T>(2./3.)*(
-               ABC.A * cos(wt) +
-               ABC.B * cos(wt - static_cast<T>(2./3.*PIx1)) +
-               ABC.C * cos(wt + static_cast<T>(2./3.*PIx1)));
+               ABC.A * AUX_UTILITY::cos(wt) +
+               ABC.B * AUX_UTILITY::cos(wt - static_cast<T>(2./3.*PIx1)) +
+               ABC.C * AUX_UTILITY::cos(wt + static_cast<T>(2./3.*PIx1)));
       
       dqo.q = static_cast<T>(-2./3.)*(
-              ABC.A * sin(wt) +
-              ABC.B * sin(wt - static_cast<T>(2./3.*PIx1)) +
-              ABC.C * sin(wt + static_cast<T>(2./3.*PIx1)));
+              ABC.A * AUX_UTILITY::sin(wt) +
+              ABC.B * AUX_UTILITY::sin(wt - static_cast<T>(2./3.*PIx1)) +
+              ABC.C * AUX_UTILITY::sin(wt + static_cast<T>(2./3.*PIx1)));
       
       dqo.o = static_cast<T>(1./3.)*(ABC.A + ABC.B + ABC.C);
 #endif
@@ -229,24 +205,24 @@ namespace clarkes{
   ABC_t<T> dqo2ABC(const dqo_t<T>& dqo, T wt){
       ABC_t<T> ABC;
 #if ROTATING_FRAME_90
-      ABC.A = dqo.d * sin(wt) + 
-              dqo.q * cos(wt) +
+      ABC.A = dqo.d * AUX_UTILITY::sin(wt) + 
+              dqo.q * AUX_UTILITY::cos(wt) +
               dqo.o;
-      ABC.B = dqo.d * sin(wt - static_cast<T>(2.*PIx1/3.)) + 
-              dqo.q * cos(wt - static_cast<T>(2.*PIx1/3.)) +
+      ABC.B = dqo.d * AUX_UTILITY::sin(wt - static_cast<T>(2.*PIx1/3.)) + 
+              dqo.q * AUX_UTILITY::cos(wt - static_cast<T>(2.*PIx1/3.)) +
               dqo.o;
-      ABC.C = dqo.d * sin(wt + static_cast<T>(2.*PIx1/3.)) + 
-              dqo.q * cos(wt + static_cast<T>(2.*PIx1/3.)) +
+      ABC.C = dqo.d * AUX_UTILITY::sin(wt + static_cast<T>(2.*PIx1/3.)) + 
+              dqo.q * AUX_UTILITY::cos(wt + static_cast<T>(2.*PIx1/3.)) +
               dqo.o;
 #else
-      ABC.A = dqo.d * cos(wt) - 
-              dqo.q * sin(wt) +
+      ABC.A = dqo.d * AUX_UTILITY::cos(wt) - 
+              dqo.q * AUX_UTILITY::sin(wt) +
               dqo.o;
-      ABC.B = dqo.d * cos(wt - static_cast<T>(2.*PIx1/3.)) -
-              dqo.q * sin(wt - static_cast<T>(2.*PIx1/3.)) +
+      ABC.B = dqo.d * AUX_UTILITY::cos(wt - static_cast<T>(2.*PIx1/3.)) -
+              dqo.q * AUX_UTILITY::sin(wt - static_cast<T>(2.*PIx1/3.)) +
               dqo.o;
-      ABC.C = dqo.d * cos(wt + static_cast<T>(2.*PIx1/3.)) - 
-              dqo.q * sin(wt + static_cast<T>(2.*PIx1/3.)) +
+      ABC.C = dqo.d * AUX_UTILITY::cos(wt + static_cast<T>(2.*PIx1/3.)) - 
+              dqo.q * AUX_UTILITY::sin(wt + static_cast<T>(2.*PIx1/3.)) +
               dqo.o;
 #endif
       return ABC;
@@ -259,24 +235,24 @@ namespace clarkes{
   template<typename T>
   void dqo2ABC(const dqo_t<T>& dqo, ABC_t<T>& ABC, T wt){
 #if ROTATING_FRAME_90
-      ABC.A = dqo.d * sin(wt) + 
-              dqo.q * cos(wt) +
+      ABC.A = dqo.d * AUX_UTILITY::sin(wt) + 
+              dqo.q * AUX_UTILITY::cos(wt) +
               dqo.o;
-      ABC.B = dqo.d * sin(wt - static_cast<T>(2.*PIx1/3.)) + 
-              dqo.q * cos(wt - static_cast<T>(2.*PIx1/3.)) +
+      ABC.B = dqo.d * AUX_UTILITY::sin(wt - static_cast<T>(2.*PIx1/3.)) + 
+              dqo.q * AUX_UTILITY::cos(wt - static_cast<T>(2.*PIx1/3.)) +
               dqo.o;
-      ABC.C = dqo.d * sin(wt + static_cast<T>(2.*PIx1/3.)) + 
-              dqo.q * cos(wt + static_cast<T>(2.*PIx1/3.)) +
+      ABC.C = dqo.d * AUX_UTILITY::sin(wt + static_cast<T>(2.*PIx1/3.)) + 
+              dqo.q * AUX_UTILITY::cos(wt + static_cast<T>(2.*PIx1/3.)) +
               dqo.o;
 #else
-      ABC.A = dqo.d * cos(wt) - 
-              dqo.q * sin(wt) +
+      ABC.A = dqo.d * AUX_UTILITY::cos(wt) - 
+              dqo.q * AUX_UTILITY::sin(wt) +
               dqo.o;
-      ABC.B = dqo.d * cos(wt - static_cast<T>(2.*PIx1/3.)) -
-              dqo.q * sin(wt - static_cast<T>(2.*PIx1/3.)) +
+      ABC.B = dqo.d * AUX_UTILITY::cos(wt - static_cast<T>(2.*PIx1/3.)) -
+              dqo.q * AUX_UTILITY::sin(wt - static_cast<T>(2.*PIx1/3.)) +
               dqo.o;
-      ABC.C = dqo.d * cos(wt + static_cast<T>(2.*PIx1/3.)) - 
-              dqo.q * sin(wt + static_cast<T>(2.*PIx1/3.)) +
+      ABC.C = dqo.d * AUX_UTILITY::cos(wt + static_cast<T>(2.*PIx1/3.)) - 
+              dqo.q * AUX_UTILITY::sin(wt + static_cast<T>(2.*PIx1/3.)) +
               dqo.o;
 #endif
   }
@@ -286,12 +262,12 @@ namespace clarkes{
   abo_t<T> dqo2abo(const dqo_t<T>& dqo, T wt){
       abo_t<T> abo; 
       #if ROTATING_FRAME_90
-      abo.a =  dqo.d * sin(wt) + dqo.q * cos(wt);
-      abo.b = -dqo.d * cos(wt) + dqo.q * sin(wt);
+      abo.a =  dqo.d * AUX_UTILITY::sin(wt) + dqo.q * AUX_UTILITY::cos(wt);
+      abo.b = -dqo.d * AUX_UTILITY::cos(wt) + dqo.q * AUX_UTILITY::sin(wt);
       abo.o =  dqo.o;
       #else 
-      abo.a = dqo.d * cos(wt) - dqo.q * sin(wt);
-      abo.b = dqo.d * sin(wt) + dqo.q * cos(wt);
+      abo.a = dqo.d * AUX_UTILITY::cos(wt) - dqo.q * AUX_UTILITY::sin(wt);
+      abo.b = dqo.d * AUX_UTILITY::sin(wt) + dqo.q * AUX_UTILITY::cos(wt);
       abo.o = dqo.o;
       #endif
       return abo;
@@ -301,12 +277,12 @@ namespace clarkes{
   template<typename T>
   void dqo2abo(const dqo_t<T>& dqo, abo_t<T>& abo, T wt){
       #if ROTATING_FRAME_90
-      abo.a =  dqo.d * sin(wt) + dqo.q * cos(wt);
-      abo.b = -dqo.d * cos(wt) + dqo.q * sin(wt);
+      abo.a =  dqo.d * AUX_UTILITY::sin(wt) + dqo.q * AUX_UTILITY::cos(wt);
+      abo.b = -dqo.d * AUX_UTILITY::cos(wt) + dqo.q * AUX_UTILITY::sin(wt);
       abo.o =  dqo.o;
       #else 
-      abo.a = dqo.d * cos(wt) - dqo.q * sin(wt);
-      abo.b = dqo.d * sin(wt) + dqo.q * cos(wt);
+      abo.a = dqo.d * AUX_UTILITY::cos(wt) - dqo.q * AUX_UTILITY::sin(wt);
+      abo.b = dqo.d * AUX_UTILITY::sin(wt) + dqo.q * AUX_UTILITY::cos(wt);
       abo.o = dqo.o;
       #endif
   }
@@ -316,12 +292,12 @@ namespace clarkes{
   dqo_t<T> abo2dqo(const abo_t<T>& abo, T wt){
       dqo_t<T> dqo; 
       #if ROTATING_FRAME_90
-      dqo.d = abo.a * sin(wt) - abo.b * cos(wt);
-      dqo.q = abo.a * cos(wt) + abo.b * sin(wt);
+      dqo.d = abo.a * AUX_UTILITY::sin(wt) - abo.b * AUX_UTILITY::cos(wt);
+      dqo.q = abo.a * AUX_UTILITY::cos(wt) + abo.b * AUX_UTILITY::sin(wt);
       dqo.o =  abo.o;
       #else 
-      dqo.d =  abo.a * cos(wt) + abo.b * sin(wt);
-      dqo.q = -abo.a * sin(wt) + abo.b * cos(wt);
+      dqo.d =  abo.a * AUX_UTILITY::cos(wt) + abo.b * AUX_UTILITY::sin(wt);
+      dqo.q = -abo.a * AUX_UTILITY::sin(wt) + abo.b * AUX_UTILITY::cos(wt);
       dqo.o =  abo.o;
       #endif
       return dqo;
@@ -331,12 +307,12 @@ namespace clarkes{
   template<typename T>
   void abo2dqo(const abo_t<T>& abo, dqo_t<T>& dqo, T wt){
       #if ROTATING_FRAME_90
-      dqo.d = -abo.a * sin(wt) + abo.b * cos(wt);
-      dqo.q = -abo.a * cos(wt) - abo.b * sin(wt);
+      dqo.d = -abo.a * AUX_UTILITY::sin(wt) + abo.b * AUX_UTILITY::cos(wt);
+      dqo.q = -abo.a * AUX_UTILITY::cos(wt) - abo.b * AUX_UTILITY::sin(wt);
       dqo.o =  abo.o;
       #else 
-      dqo.d =  abo.a * cos(wt) + abo.b * sin(wt);
-      dqo.q = -abo.a * sin(wt) + abo.b * cos(wt);
+      dqo.d =  abo.a * AUX_UTILITY::cos(wt) + abo.b * AUX_UTILITY::sin(wt);
+      dqo.q = -abo.a * AUX_UTILITY::sin(wt) + abo.b * AUX_UTILITY::cos(wt);
       dqo.o =  abo.o;
       #endif
   }
@@ -345,8 +321,8 @@ namespace clarkes{
   template<typename T>
   polar_t<T> c2p(T Vx, T Vy){
       polar_t<T> V;
-      V.mag = sqrt(pow(Vx, 2.f) + pow(Vy, 2.f));
-      V.th = atan2(Vy, Vx);
+      V.mag = AUX_UTILITY::sqrt(Vx * Vx + Vy * Vy);
+      V.th  = AUX_UTILITY::atan2(Vy, Vx);
       return V;
   }
   
@@ -360,8 +336,8 @@ namespace clarkes{
   
   template<typename T>
   void c2p(const cartesian_t<T>& Vxy, polar_t<T>& V){
-      V.mag = sqrt(pow(Vxy.x, 2.f) + pow(Vxy.y, 2.f));
-      V.th = atan2(Vxy.y, Vxy.x);
+      V.mag = AUX_UTILITY::sqrt(Vxy.x * Vxy.x + Vxy.y * Vxy.y);
+      V.th  = AUX_UTILITY::atan2(Vxy.y, Vxy.x);
   }
   
   
@@ -378,8 +354,8 @@ namespace clarkes{
   template<typename T>
   cartesian_t<T> p2c(const polar_t<T>& V){
       cartesian_t<T> Vxy;
-      Vxy.x = V.mag * cos(V.th);
-      Vxy.y = V.mag * sin(V.th);
+      Vxy.x = V.mag * AUX_UTILITY::cos(V.th);
+      Vxy.y = V.mag * AUX_UTILITY::sin(V.th);
       return Vxy;
   }
   
@@ -387,15 +363,15 @@ namespace clarkes{
   template<typename T>
   cartesian_t<T> p2c(T Amp, T theta){
       cartesian_t<T> Vxy;
-      Vxy.x = Amp * cos(theta);
-      Vxy.y = Amp * sin(theta);
+      Vxy.x = Amp * AUX_UTILITY::cos(theta);
+      Vxy.y = Amp * AUX_UTILITY::sin(theta);
       return Vxy;
   }
   
   
   template<typename T>
   T mag(T Vx, T Vy){
-      return sqrt(pow(Vx, T(2.)) + pow(Vy, T(2.)));
+      return AUX_UTILITY::sqrt(Vx*Vx + Vy*Vy);
   }
 
 } //namespace clarkes

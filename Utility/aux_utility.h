@@ -16,6 +16,7 @@
 #include "IXmathLib.hpp"
 #include "arm_math.h"
 
+
 template<class T>
 T set_bit(T _bitNo){
     return
@@ -51,6 +52,8 @@ constexpr std::size_t array_size(T (&)[N]){
 }
 
 #define ABS(x) ((x) < 0 ? (-x) : (x))
+
+constexpr bool USE_TAILOR = false; 
 
 
 /**
@@ -165,17 +168,33 @@ namespace AUX_UTILITY{
     
     template<typename T, std::enable_if_t<std::is_same_v<T, double>, bool> = true>   
     auto sin(const T& v){
-        return std::sin(v);
+        if constexpr(USE_TAILOR){
+            return tailor::sin(v);
+        }
+        else{
+            return std::sin(v);
+        }
     }
     
     template<typename T, std::enable_if_t<std::is_same_v<T, float>, bool> = true>   
     auto sin(const T& v){
-        return arm_sin_f32(v);
+        if constexpr(USE_TAILOR){
+            return tailor::sin(v);
+        }
+        else{
+            return arm_sin_f32(v);
+        }
+        
     }
                         
     template<typename T, std::enable_if_t<std::is_same_v<typename T::ix_t, typename T::ix_t>, bool> = true>   
     auto sin(const T& v){
-        return IXsin(v);
+        if constexpr(USE_TAILOR){
+            return tailor::sin(v);
+        }
+        else{
+            return IXsin(v);
+        }
     }
     
     
@@ -187,18 +206,57 @@ namespace AUX_UTILITY{
     
     template<typename T, std::enable_if_t<std::is_same_v<T, double>, bool> = true>   
     auto cos(const T& v){
-        return std::cos(v);
+        if constexpr(USE_TAILOR){
+            return tailor::cos(v);
+        }
+        else{
+            return std::cos(v);
+        }
     }
     
     template<typename T, std::enable_if_t<std::is_same_v<T, float>, bool> = true>   
     auto cos(const T& v){
-        return arm_cos_f32(v);
+        if constexpr(USE_TAILOR){
+            return tailor::cos(v);
+        }
+        else{
+            return arm_cos_f32(v);
+        }
     }
                         
     template<typename T, std::enable_if_t<std::is_same_v<typename T::ix_t, typename T::ix_t>, bool> = true>   
     auto cos(const T& v){
-        return IXcos(v);
+        if constexpr(USE_TAILOR){
+            return tailor::cos(v);
+        }
+        else{
+            return IXcos(v);
+        }
     }
+    
+    
+    
+    /**
+      * @brief Estimate sqrt
+      * @param[in]      v      
+      * @return         out     
+      */
+    
+    template<typename T, std::enable_if_t<std::is_same_v<T, double>, bool> = true>   
+    auto sqrt(const T& v){
+        return std::sqrt(v);
+    }
+    
+    template<typename T, std::enable_if_t<std::is_same_v<T, float>, bool> = true>   
+    auto sqrt(const T& v){
+        return arm_sqrt_f32(v);
+    }
+                        
+    template<typename T, std::enable_if_t<std::is_same_v<typename T::ix_t, typename T::ix_t>, bool> = true>   
+    auto sqrt(const T& v){
+        return IXsqrt(v);
+    }
+    
     
     /**
       * @defgroup nsAUX_UTILITY AUX_UTILITY Functions
@@ -258,9 +316,12 @@ namespace AUX_UTILITY{
                               
 template <typename T>
 auto angle_saturate(T&& _wt){
-  	using Type = std::remove_reference_t<T>;
-    if (_wt > static_cast<Type>(utl::PIx1)) _wt -= static_cast<Type>(utl::PIx2);
-    else if (_wt < static_cast<Type>(-utl::PIx1)) _wt += static_cast<Type>(utl::PIx2);
+    using Type = std::remove_reference_t<T>;
+    const Type PIx1 = utl::PIx1;
+    const Type PIx2 = utl::PIx2;  
+    
+    if (_wt > PIx1) _wt -= PIx2;
+    else if (_wt < -PIx1) _wt += PIx2;
     return _wt;
 }
                               
