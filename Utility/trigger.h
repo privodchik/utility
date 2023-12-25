@@ -17,13 +17,23 @@ class RS_Trig{
     RS_Trig() : Q(false), nQ(true){}
     
     void set(){
-        nQ = not(true or Q);
-        Q = not(false or nQ);
+        /* 
+         * nQ = not(Q or true);    // 0
+         * Q = not(false or nQ);   // 1
+         */
+        
+        nQ = false;
+        Q  = true;
     }
     
     void reset(){
-        Q = not(true or nQ);
-        nQ = not(false or Q);
+        /*
+         * Q = not(nQ or true);
+         * nQ = not(false or Q);
+         */
+        nQ = true;
+        Q  = false;
+        
     }
     
     bool read_Q(){return Q;}
