@@ -1443,7 +1443,7 @@ constexpr auto IXsqrt(const T& A){
 template<typename T, std::enable_if_t<std::is_same_v<typename T::Type, float>, bool> = true >
 constexpr auto IXsqrt(const T& A){
     T B;
-    B.val = arm_sqrt_f32(A.val);
+    arm_sqrt_f32(A.val, &B.val);
     return B;
 }
 
