@@ -594,6 +594,12 @@ class PIreg final: public TFBase<T>{
         m_K = std::forward<U>(K);
         m_I.config(std::forward<U>(Ti));
     }
+    
+    
+    constexpr void sat_set(T SatP, T SatN){
+        TFBase<T>::sat_set(SatP, SatN);
+        m_I.sat_set(SatP, SatN);
+    }
 
       
     template<typename U>
@@ -914,6 +920,9 @@ class AVG{
         return yk = (xk + yk) / T(2.0);
     }
     
+    constexpr T& out_get(){
+        return yk;
+    }
     
     constexpr void reset(){yk = T{0};}
         
