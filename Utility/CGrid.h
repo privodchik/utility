@@ -41,6 +41,10 @@ class CGrid{
       
       const T& out_get() const {return currentValue;}
       void angle_set(T th){wt.out_set(th);}
+      void reset(){
+          currentValue = T(0); 
+          wt.reset();
+      }
 };
 
 
