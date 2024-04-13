@@ -45,6 +45,7 @@ class CPLL{
     
     constexpr const T& w_get() const{return m_outs.w;}
     constexpr const T& theta_get() const{return m_outs.theta.out_get();}
+    constexpr const T& amp_get() const{return m_Vdq.d;}
     
 };
 
