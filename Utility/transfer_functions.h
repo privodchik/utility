@@ -608,6 +608,11 @@ class PIreg final: public TFBase<T>{
         return TFBase<T>::out_limit();
     }
     
+    void out_set(T yk){
+        m_I.out_set(yk);
+        TFBase<T>::out_set(yk);
+    }
+    
     constexpr void reset(){
         m_I.reset();
         TFBase<T>::reset();
