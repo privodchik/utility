@@ -26,9 +26,9 @@ class CPLL{
     clarkes::dqo_t<T>   m_Vdq;
     const T WREF; 
   public:
-    constexpr CPLL(T Ts, T Wref,  T K, T Ti, T Sat) : 
-                  m_outs(PLLOuts_t{Ts, T(0), T(0)}),
-                  m_piReg(TF::PIreg{ Ts, K, Ti, Sat, -Sat}),             
+    constexpr CPLL(T Ts, T Wref,  T K, T Ti, T SatP, T SatN) : 
+                  m_outs(PLLOuts_t{Ts, Wref, T(0)}),
+                  m_piReg(TF::PIreg{ Ts, K, Ti, SatP, SatN}),             
                   WREF(Wref)
                   {}
 
@@ -37,7 +37,8 @@ class CPLL{
     constexpr const PLLOuts_t<T>& out_est(U&& Vabo){
         
         clarkes::abo2dqo<T>(Vabo, m_Vdq, m_outs.theta.out_get());
-        m_outs.w = WREF + m_piReg.out_est(T(0) - m_Vdq.q);
+        T w_pu_ = T(1.0) + m_piReg.out_est(T(0) - m_Vdq.q);
+        m_outs.w = w_pu_ * WREF;
         m_outs.theta.out_est(m_outs.w);
         
         return m_outs;
