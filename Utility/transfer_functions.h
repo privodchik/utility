@@ -8,6 +8,7 @@
 #include <utility>
 #include <type_traits>
 #include <cmath>
+#include "arm_math.h"
 
 //#define USE_INFO
 
@@ -27,16 +28,16 @@ class TFBase{
   protected:
     T m_satPos, m_satNeg;
   public:
-  
+
     constexpr TFBase(){
         #ifdef USE_INFO
         std::cout << "TFBase Ctor" << std::endl;
-        #endif         
+        #endif
     }
-    constexpr TFBase(T Ts, T satPos, T satNeg) : 
+    constexpr TFBase(T Ts, T satPos, T satNeg) :
                   m_yk(T{0}),
-                  m_Ts(std::move(Ts)), 
-                  m_satPos(std::move(satPos)), 
+                  m_Ts(std::move(Ts)),
+                  m_satPos(std::move(satPos)),
                   m_satNeg(std::move(satNeg))
     {
         #ifdef USE_INFO
@@ -45,7 +46,7 @@ class TFBase{
     }
 
 
-    TFBase(const TFBase& value) : 
+    TFBase(const TFBase& value) :
                         m_Ts(value.m_Ts),
                         m_yk(value.m_yk),
                         m_satPos(value.m_satPos),
@@ -67,7 +68,7 @@ class TFBase{
         std::cout << "TFBase Copy assignment" << std::endl;
         #endif
         return *this;
-    }                    
+    }
 
     TFBase(TFBase&& value) :
                     m_Ts(std::move(value.m_Ts)),
@@ -93,7 +94,7 @@ class TFBase{
         return *this;
     }
 
-    
+
     virtual ~TFBase() = 0;
 
   protected:
@@ -103,15 +104,15 @@ class TFBase{
     }
   public:
     constexpr const T& out_get() const{return m_yk;}
-    
+
     template<typename U>
     constexpr void out_set(U&& val){m_yk = std::forward<U>(val);}
-    
+
     constexpr void reset(){m_yk = T{0};}
     constexpr T Ts_get() const {return m_Ts;}
-    
+
     constexpr void sat_set(T satP, T satN){m_satPos = satP; m_satNeg = satN;}
-    
+
 };
 
 template<class T>
@@ -136,35 +137,35 @@ class Filter final: public TFBase<T>{
     constexpr Filter(){
         #ifdef USE_INFO
         std::cout << "Filter Ctor" << std::endl;
-        #endif   
+        #endif
     }
-    constexpr Filter(T Ts, T Tf, T satPos, T satNeg) : 
+    constexpr Filter(T Ts, T Tf, T satPos, T satNeg) :
       TFBase<T>(std::move(Ts), std::move(satPos), std::move(satNeg))
     {
         config(std::move(Tf));
         #ifdef USE_INFO
         std::cout << "Filter Ctor" << std::endl;
-        #endif   
+        #endif
     }
-    
-    Filter(const Filter& value) : 
-                    TFBase<T>(*static_cast<const TFBase<T>*>(&value)), 
+
+    Filter(const Filter& value) :
+                    TFBase<T>(*static_cast<const TFBase<T>*>(&value)),
                     m_k1(value.m_k1),
                     m_k2(value.m_k2)
     {
         #ifdef USE_INFO
         std::cout << "Filter Copy ctor" << std::endl;
-        #endif          
+        #endif
     }
 
-    Filter(Filter&& value) : 
-                    TFBase<T>(std::move(*static_cast<TFBase<T>*>(&value))), 
+    Filter(Filter&& value) :
+                    TFBase<T>(std::move(*static_cast<TFBase<T>*>(&value))),
                     m_k1(std::move(value.m_k1)),
                     m_k2(std::move(value.m_k2))
     {
         #ifdef USE_INFO
         std::cout << "Filter Move ctor" << std::endl;
-        #endif         
+        #endif
     }
 
     Filter& operator=(const Filter& value){
@@ -175,9 +176,9 @@ class Filter final: public TFBase<T>{
         }
         #ifdef USE_INFO
         std::cout << "Filter Copy assignment" << std::endl;
-        #endif         
+        #endif
         return *this;
-    }                
+    }
 
     Filter& operator=(Filter&& value){
         if (this != &value){
@@ -187,22 +188,22 @@ class Filter final: public TFBase<T>{
         }
         #ifdef USE_INFO
         std::cout << "Filter Move assignment" << std::endl;
-        #endif         
+        #endif
         return *this;
-    } 
+    }
 
     ~Filter(){
         #ifdef USE_INFO
         std::cout << "Filter Dtor" << std::endl;
         #endif
     }
-      
+
     template<typename  U>
     constexpr void config(U&& Tf){
         m_k1 = TFBase<T>::m_Ts / (TFBase<T>::m_Ts + Tf);
         m_k2 = Tf / (TFBase<T>::m_Ts + Tf);
     }
-        
+
 
     template<typename U>
     constexpr decltype(auto) out_est(U&& xk){
@@ -210,7 +211,7 @@ class Filter final: public TFBase<T>{
         return TFBase<T>::out_limit();
     }
 
-    
+
     const T& out_get() const{return TFBase<T>::m_yk;}
 };
 
@@ -220,40 +221,40 @@ class Filter final: public TFBase<T>{
 //--------------------------------------- Integrator -----------------------------------------------
 template<class T>
 class Integrator final: public TFBase<T>{
-    
+
     T m_TsDivTi;
-    
+
   public:
 
     constexpr Integrator(){
         #ifdef USE_INFO
         std::cout << "Integrator Ctor" << std::endl;
-        #endif         
+        #endif
     }
-    constexpr Integrator(T Ts, T Ti, T satPos, T satNeg ) : 
-            TFBase<T>(std::move(Ts), std::move(satPos), std::move(satNeg)){ 
+    constexpr Integrator(T Ts, T Ti, T satPos, T satNeg ) :
+            TFBase<T>(std::move(Ts), std::move(satPos), std::move(satNeg)){
         config(std::move(Ti));
         #ifdef USE_INFO
         std::cout << "Integrator Ctor" << std::endl;
-        #endif          
+        #endif
     }
 
-    Integrator(const Integrator& value) : 
-                    TFBase<T>(*static_cast<const TFBase<T>*>(&value)), 
+    Integrator(const Integrator& value) :
+                    TFBase<T>(*static_cast<const TFBase<T>*>(&value)),
                     m_TsDivTi(value.m_TsDivTi)
     {
         #ifdef USE_INFO
         std::cout << "Integrator Copy ctor" << std::endl;
-        #endif          
+        #endif
     }
 
-    Integrator(Integrator&& value) : 
-                    TFBase<T>(std::move(*static_cast<TFBase<T>*>(&value))), 
+    Integrator(Integrator&& value) :
+                    TFBase<T>(std::move(*static_cast<TFBase<T>*>(&value))),
                     m_TsDivTi(std::move(value.m_TsDivTi))
     {
         #ifdef USE_INFO
         std::cout << "Integrator Move ctor" << std::endl;
-        #endif         
+        #endif
     }
 
     Integrator& operator=(const Integrator& value){
@@ -263,9 +264,9 @@ class Integrator final: public TFBase<T>{
         }
         #ifdef USE_INFO
         std::cout << "Integrator Copy assignment" << std::endl;
-        #endif         
+        #endif
         return *this;
-    }                
+    }
 
     Integrator& operator=(Integrator&& value){
         if (this != &value){
@@ -274,22 +275,22 @@ class Integrator final: public TFBase<T>{
         }
         #ifdef USE_INFO
         std::cout << "Integrator Move assignment" << std::endl;
-        #endif         
+        #endif
         return *this;
-    } 
+    }
 
     ~Integrator(){
         #ifdef USE_INFO
         std::cout << "Integrator Dtor" << std::endl;
         #endif
-    }               
-      
+    }
+
     template<typename U>
     constexpr void config(U&& Ti){
         m_TsDivTi = TFBase<T>::m_Ts / Ti;
     }
 
-    
+
     template<typename U>
     constexpr decltype(auto) out_est(U&& xk){
         TFBase<T>::m_yk += m_TsDivTi * std::forward<U>(xk);
@@ -306,43 +307,43 @@ template<class T>
 class TrapezIntegrator final: public TFBase<T>{
     T m_xk_1;
     T m_TsDivTi;
-    
+
   public:
 
     constexpr TrapezIntegrator(){
         #ifdef USE_INFO
         std::cout << "TrapezIntegrator Ctor" << std::endl;
-        #endif         
+        #endif
     }
-   
-    constexpr TrapezIntegrator(T Ts, T Ti, T satPos, T satNeg ) : 
+
+    constexpr TrapezIntegrator(T Ts, T Ti, T satPos, T satNeg ) :
             m_xk_1(T{0}),
             TFBase<T>(std::move(Ts), std::move(satPos), std::move(satNeg))
-   { 
+   {
         config(std::move(Ti));
         #ifdef USE_INFO
         std::cout << "TrapezIntegrator Ctor" << std::endl;
-        #endif          
+        #endif
     }
 
-    TrapezIntegrator(const TrapezIntegrator& value) : 
-                    TFBase<T>(*static_cast<const TFBase<T>*>(&value)), 
+    TrapezIntegrator(const TrapezIntegrator& value) :
+                    TFBase<T>(*static_cast<const TFBase<T>*>(&value)),
                     m_TsDivTi(value.m_TsDivTi),
                     m_xk_1(value.m_xk_1)
     {
         #ifdef USE_INFO
         std::cout << "TrapezIntegrator Copy ctor" << std::endl;
-        #endif          
+        #endif
     }
 
-    TrapezIntegrator(TrapezIntegrator&& value) : 
-                    TFBase<T>(std::move(*static_cast<TFBase<T>*>(&value))), 
+    TrapezIntegrator(TrapezIntegrator&& value) :
+                    TFBase<T>(std::move(*static_cast<TFBase<T>*>(&value))),
                     m_TsDivTi(std::move(value.m_TsDivTi)),
                     m_xk_1(std::move(value.m_xk_1))
     {
         #ifdef USE_INFO
         std::cout << "Integrator Move ctor" << std::endl;
-        #endif         
+        #endif
     }
 
     TrapezIntegrator& operator=(const TrapezIntegrator& value){
@@ -353,9 +354,9 @@ class TrapezIntegrator final: public TFBase<T>{
         }
         #ifdef USE_INFO
         std::cout << "TrapezIntegrator Copy assignment" << std::endl;
-        #endif         
+        #endif
         return *this;
-    }                
+    }
 
     TrapezIntegrator& operator=(TrapezIntegrator&& value){
         if (this != &value){
@@ -365,22 +366,22 @@ class TrapezIntegrator final: public TFBase<T>{
         }
         #ifdef USE_INFO
         std::cout << "TrapezIntegrator Move assignment" << std::endl;
-        #endif         
+        #endif
         return *this;
-    } 
+    }
 
     ~TrapezIntegrator(){
         #ifdef USE_INFO
         std::cout << "TrapezIntegrator Dtor" << std::endl;
         #endif
-    }               
-      
+    }
+
     template<typename U>
     constexpr void config(U&& Ti){
         m_TsDivTi = TFBase<T>::m_Ts / std::forward<U>(Ti);
     }
 
-    
+
     template<typename U>
     constexpr decltype(auto) out_est(U&& xk){
         TFBase<T>::m_yk += (m_TsDivTi / std::remove_reference_t<U>(2.0) * (xk + m_xk_1));
@@ -401,51 +402,51 @@ class TrapezIntegrator final: public TFBase<T>{
 //--------------------------------------- Simpson Integrator -----------------------------------------------
 template<class T>
 class SimpsonIntegrator final: public TFBase<T>{
-    
+
     T m_TsDivTi;
-    
+
     T m_xk_2;
     T m_xk_1;
-    
+
   public:
 
     constexpr SimpsonIntegrator(){
         #ifdef USE_INFO
         std::cout << "SimpsonIntegrator Ctor" << std::endl;
-        #endif         
+        #endif
     }
-    
-    constexpr SimpsonIntegrator(T Ts, T Ti, T satPos, T satNeg ) : 
+
+    constexpr SimpsonIntegrator(T Ts, T Ti, T satPos, T satNeg ) :
             TFBase<T>(std::move(Ts), std::move(satPos), std::move(satNeg)),
             m_xk_2(T{0}),
-            m_xk_1(T{0})        
-    { 
+            m_xk_1(T{0})
+    {
         config(std::move(Ti));
         #ifdef USE_INFO
         std::cout << "SimpsonIntegrator Ctor" << std::endl;
-        #endif          
+        #endif
     }
 
-    SimpsonIntegrator(const SimpsonIntegrator& value) : 
-                    TFBase<T>(*static_cast<const TFBase<T>*>(&value)), 
+    SimpsonIntegrator(const SimpsonIntegrator& value) :
+                    TFBase<T>(*static_cast<const TFBase<T>*>(&value)),
                     m_TsDivTi(value.m_TsDivTi),
-                    m_xk_2(value.m_xk_2), 
-                    m_xk_1(value.m_xk_1) 
+                    m_xk_2(value.m_xk_2),
+                    m_xk_1(value.m_xk_1)
     {
         #ifdef USE_INFO
         std::cout << "SimpsonIntegrator Copy ctor" << std::endl;
-        #endif          
+        #endif
     }
 
-    SimpsonIntegrator(SimpsonIntegrator&& value) : 
-                    TFBase<T>(std::move(*static_cast<TFBase<T>*>(&value))), 
+    SimpsonIntegrator(SimpsonIntegrator&& value) :
+                    TFBase<T>(std::move(*static_cast<TFBase<T>*>(&value))),
                     m_TsDivTi(std::move(value.m_TsDivTi)),
-                    m_xk_2(std::move(value.m_xk_2)),        
-                    m_xk_1(std::move(value.m_xk_1))        
+                    m_xk_2(std::move(value.m_xk_2)),
+                    m_xk_1(std::move(value.m_xk_1))
     {
         #ifdef USE_INFO
         std::cout << "SimpsonIntegrator Move ctor" << std::endl;
-        #endif         
+        #endif
     }
 
     SimpsonIntegrator& operator=(const SimpsonIntegrator& value){
@@ -457,9 +458,9 @@ class SimpsonIntegrator final: public TFBase<T>{
         }
         #ifdef USE_INFO
         std::cout << "SimpsonIntegrator Copy assignment" << std::endl;
-        #endif         
+        #endif
         return *this;
-    }                
+    }
 
     SimpsonIntegrator& operator=(SimpsonIntegrator&& value){
         if (this != &value){
@@ -470,25 +471,25 @@ class SimpsonIntegrator final: public TFBase<T>{
         }
         #ifdef USE_INFO
         std::cout << "SimpsonIntegrator Move assignment" << std::endl;
-        #endif         
+        #endif
         return *this;
-    } 
+    }
 
     ~SimpsonIntegrator(){
         #ifdef USE_INFO
         std::cout << "SimpsonIntegrator Dtor" << std::endl;
         #endif
-    }               
-      
+    }
+
     template<typename U>
     constexpr void config(U&& Ti){
         m_TsDivTi = TFBase<T>::m_Ts / Ti;
     }
 
-    
+
     template<typename U>
     constexpr decltype(auto) out_est(U&& xk){
-        
+
         auto S = m_xk_2 + std::remove_reference_t<U>(4.0) * m_xk_1 + xk;
         S *= (m_TsDivTi * std::remove_reference_t<U>(1.0/3.0));
         S /= std::remove_reference_t<U>(2.0);
@@ -496,10 +497,10 @@ class SimpsonIntegrator final: public TFBase<T>{
 
         m_xk_2 = m_xk_1;
         m_xk_1 = std::forward<U>(xk);
-        
+
         return TFBase<T>::out_limit();
     }
-    
+
     void reset(){
         m_xk_2 = 0;
         m_xk_1 = 0;
@@ -514,48 +515,48 @@ class SimpsonIntegrator final: public TFBase<T>{
 //--------------------------------------- PI-Regulator ---------------------------------------------
 template<class T>
 class PIreg final: public TFBase<T>{
-    
+
     T m_K;
     Integrator<T> m_I;
-    
+
   public:
 
     constexpr PIreg(){
         #ifdef USE_INFO
         std::cout << "PIreg Ctor" << std::endl;
-        #endif 
-    } 
-    
-    constexpr PIreg(T Ts, T K, T Ti, T satPos, T satNeg) : 
+        #endif
+    }
+
+    constexpr PIreg(T Ts, T K, T Ti, T satPos, T satNeg) :
       TFBase<T>(Ts, satPos, satNeg),
       m_K(K),
       m_I(Ts, Ti, satPos, satNeg)
     {
-        config(std::move(K), std::move(Ti)); 
+        config(std::move(K), std::move(Ti));
         #ifdef USE_INFO
         std::cout << "PIreg Ctor" << std::endl;
-        #endif 
-        
+        #endif
+
     }
 
-    PIreg(const PIreg& value) : 
-                    TFBase<T>(*static_cast<TFBase<T*>>(&value)), 
+    PIreg(const PIreg& value) :
+                    TFBase<T>(*static_cast<TFBase<T*>>(&value)),
                     m_K(value.m_K),
                     m_I(value.m_I)
     {
         #ifdef USE_INFO
         std::cout << "PIreg Copy ctor" << std::endl;
-        #endif          
+        #endif
     }
 
-    PIreg(PIreg&& value) : 
-                    TFBase<T>(std::move(*static_cast<TFBase<T*>>(*value))), 
+    PIreg(PIreg&& value) :
+                    TFBase<T>(std::move(*static_cast<TFBase<T*>>(*value))),
                     m_K(std::move(value.m_K)),
                     m_I(std::move(value.m_I))
     {
         #ifdef USE_INFO
         std::cout << "PIreg Move ctor" << std::endl;
-        #endif         
+        #endif
     }
 
     PIreg& operator=(const PIreg& value){
@@ -566,9 +567,9 @@ class PIreg final: public TFBase<T>{
         }
         #ifdef USE_INFO
         std::cout << "PIreg Copy assignment" << std::endl;
-        #endif         
+        #endif
         return *this;
-    }                
+    }
 
     PIreg& operator=(PIreg&& value){
         if (this != &value){
@@ -578,41 +579,41 @@ class PIreg final: public TFBase<T>{
         }
         #ifdef USE_INFO
         std::cout << "PIreg Move assignment" << std::endl;
-        #endif         
+        #endif
         return *this;
-    } 
+    }
 
     ~PIreg(){
         #ifdef USE_INFO
         std::cout << "PIreg Dtor" << std::endl;
         #endif
     }
-      
-      
+
+
     template<typename U>
     constexpr void config(U&& K, U&& Ti){
         m_K = std::forward<U>(K);
         m_I.config(std::forward<U>(Ti));
     }
-    
-    
+
+
     constexpr void sat_set(T SatP, T SatN){
         TFBase<T>::sat_set(SatP, SatN);
         m_I.sat_set(SatP, SatN);
     }
 
-      
+
     template<typename U>
     constexpr decltype(auto) out_est(U&& xk){
         TFBase<T>::m_yk = m_K * xk + m_I.out_est(xk);
         return TFBase<T>::out_limit();
     }
-    
+
     void out_set(T yk){
         m_I.out_set(yk);
         TFBase<T>::out_set(yk);
     }
-    
+
     constexpr void reset(){
         m_I.reset();
         TFBase<T>::reset();
@@ -626,39 +627,39 @@ class PIreg final: public TFBase<T>{
 //--------------------------------------- Difference -----------------------------------------------
 template<class T>
 class Difference final: public TFBase<T>{
-    
+
     T m_yk_1;
-    
+
   public:
     constexpr Difference(){
         #ifdef USE_INFO
         std::cout << "Difference Ctor" << std::endl;
-        #endif    
+        #endif
     }
-    constexpr Difference(T satPos, T satNeg) : 
+    constexpr Difference(T satPos, T satNeg) :
         TFBase<T>(T{}, std::move(satPos), std::move(satNeg))
     {
         #ifdef USE_INFO
         std::cout << "Difference Ctor" << std::endl;
-        #endif  
+        #endif
     }
 
-    Difference(const Difference& value) : 
-                    TFBase<T>(*static_cast<const TFBase<T>*>(&value)), 
+    Difference(const Difference& value) :
+                    TFBase<T>(*static_cast<const TFBase<T>*>(&value)),
                     m_yk_1(value.m_yk_1)
     {
         #ifdef USE_INFO
         std::cout << "Difference Copy ctor" << std::endl;
-        #endif          
+        #endif
     }
 
-    Difference(Difference&& value) : 
-                    TFBase<T>(std::move(*static_cast<TFBase<T>*>(&value))), 
+    Difference(Difference&& value) :
+                    TFBase<T>(std::move(*static_cast<TFBase<T>*>(&value))),
                     m_yk_1(std::move(value.m_yk_1))
     {
         #ifdef USE_INFO
         std::cout << "Difference Move ctor" << std::endl;
-        #endif         
+        #endif
     }
 
     Difference& operator=(const Difference& value){
@@ -668,9 +669,9 @@ class Difference final: public TFBase<T>{
         }
         #ifdef USE_INFO
         std::cout << "Difference Copy assignment" << std::endl;
-        #endif         
+        #endif
         return *this;
-    }                
+    }
 
     Difference& operator=(Difference&& value){
         if (this != &value){
@@ -679,9 +680,9 @@ class Difference final: public TFBase<T>{
         }
         #ifdef USE_INFO
         std::cout << "Difference Move assignment" << std::endl;
-        #endif         
+        #endif
         return *this;
-    } 
+    }
 
     ~Difference(){
         #ifdef USE_INFO
@@ -689,7 +690,7 @@ class Difference final: public TFBase<T>{
         #endif
     }
 
-    template<typename U>  
+    template<typename U>
     constexpr decltype(auto) out_est(U&& yk){
         TFBase<T>::m_yk = yk - m_yk_1;
         m_yk_1 = std::forward<U>(yk);
@@ -704,43 +705,43 @@ class Difference final: public TFBase<T>{
 //--------------------------------------- Differentiator -------------------------------------------
 template<class T>
 class Differentiator final: public TFBase<T>{
-    
+
     T m_1DivTs;
     T m_xk_1;
-    
+
     public:
         constexpr Differentiator(){
             #ifdef USE_INFO
             std::cout << "Differentiator Ctor" << std::endl;
-            #endif 
-        }  
-        constexpr Differentiator(T Ts, T satPos, T satNeg) : 
+            #endif
+        }
+        constexpr Differentiator(T Ts, T satPos, T satNeg) :
             TFBase<T>(Ts, satPos, satNeg),
             m_1DivTs(T{1}/Ts)
         {
             #ifdef USE_INFO
             std::cout << "Differentiator Ctor" << std::endl;
-            #endif 
+            #endif
         }
 
-        Differentiator(const Differentiator& value) : 
-                    TFBase<T>(*static_cast<const TFBase<T>*>(&value)), 
+        Differentiator(const Differentiator& value) :
+                    TFBase<T>(*static_cast<const TFBase<T>*>(&value)),
                     m_1DivTs(value.m_1DivTs),
                     m_xk_1(value.m_xk_1)
         {
             #ifdef USE_INFO
             std::cout << "Differentiator Copy ctor" << std::endl;
-            #endif          
+            #endif
         }
 
-        Differentiator(Differentiator&& value) : 
-                        TFBase<T>(std::move(*static_cast<TFBase<T>*>(&value))), 
+        Differentiator(Differentiator&& value) :
+                        TFBase<T>(std::move(*static_cast<TFBase<T>*>(&value))),
                         m_1DivTs(std::move(value.m_1DivTs)),
                         m_xk_1(std::move(value.m_xk_1))
         {
             #ifdef USE_INFO
             std::cout << "Differentiator Move ctor" << std::endl;
-            #endif         
+            #endif
         }
 
         Differentiator& operator=(const Differentiator& value){
@@ -751,9 +752,9 @@ class Differentiator final: public TFBase<T>{
             }
             #ifdef USE_INFO
             std::cout << "Differentiator Copy assignment" << std::endl;
-            #endif         
+            #endif
             return *this;
-        }                
+        }
 
         Differentiator& operator=(Differentiator&& value){
             if (this != &value){
@@ -763,9 +764,9 @@ class Differentiator final: public TFBase<T>{
             }
             #ifdef USE_INFO
             std::cout << "Differentiator Move assignment" << std::endl;
-            #endif         
+            #endif
             return *this;
-        } 
+        }
 
         ~Differentiator(){
             #ifdef USE_INFO
@@ -793,7 +794,7 @@ class Differentiator final: public TFBase<T>{
 //--------------------------------------- RMS ------------------------------------------------------
 template<class T>
 class RMS final: public TFBase<T>{
-    
+
     Integrator<T>  	m_I;
     T        		m_f;
     T        		m_internalTime;
@@ -802,7 +803,7 @@ class RMS final: public TFBase<T>{
     constexpr RMS(){
         #ifdef USE_INFO
         std::cout << "RMS Ctor" << std::endl;
-        #endif         
+        #endif
     }
     constexpr RMS(T Ts, T f, T satPos, T satNeg ) : TFBase<T>(Ts, satPos, satNeg),
                                                   m_I(Ts, T{1}, satPos, satNeg),
@@ -811,29 +812,29 @@ class RMS final: public TFBase<T>{
     {
         #ifdef USE_INFO
         std::cout << "RMS Ctor" << std::endl;
-        #endif         
+        #endif
     }
 
-    RMS(const RMS& value) : 
-                    TFBase<T>(*static_cast<const TFBase<T>*>(&value)), 
+    RMS(const RMS& value) :
+                    TFBase<T>(*static_cast<const TFBase<T>*>(&value)),
                     m_I(value.m_I),
                     m_f(value.m_f),
                     m_internalTime(value.m_internalTime)
     {
         #ifdef USE_INFO
         std::cout << "RMS Copy ctor" << std::endl;
-        #endif          
+        #endif
     }
 
-    RMS(RMS&& value) : 
-                    TFBase<T>(std::move(*static_cast<TFBase<T>*>(&value))), 
+    RMS(RMS&& value) :
+                    TFBase<T>(std::move(*static_cast<TFBase<T>*>(&value))),
                     m_I(std::move(value.m_I)),
                     m_f(std::move(value.m_f)),
                     m_internalTime(std::move(value.m_internalTime))
     {
         #ifdef USE_INFO
         std::cout << "RMS Move ctor" << std::endl;
-        #endif         
+        #endif
     }
 
     RMS& operator=(const RMS& value){
@@ -845,9 +846,9 @@ class RMS final: public TFBase<T>{
         }
         #ifdef USE_INFO
         std::cout << "RMS Copy assignment" << std::endl;
-        #endif         
+        #endif
         return *this;
-    }                
+    }
 
     RMS& operator=(RMS&& value){
         if (this != &value){
@@ -858,41 +859,63 @@ class RMS final: public TFBase<T>{
         }
         #ifdef USE_INFO
         std::cout << "RMS Move assignment" << std::endl;
-        #endif         
+        #endif
         return *this;
-    } 
+    }
 
     ~RMS(){
         #ifdef USE_INFO
         std::cout << "RMS Dtor" << std::endl;
         #endif
     }
-    
+
     template<typename U>
     constexpr void config(U&& Ti){
         m_I.config(std::forward<U>(Ti));
     }
 
   private:
-    
+
+//    template<typename U, std::enable_if_t<std::is_same_v<U, double>, bool> = true>
+//    constexpr decltype(auto) sqrt_helper(const U& v){
+//        return std::sqrt(v);
+//    }
+//
+//    template<typename U, std::enable_if_t<std::is_same_v<U, float>, bool> = true>
+//    constexpr decltype(auto) sqrt_helper(const U& v){
+//        U r_ = U(0);
+//        arm_sqrt_f32(v, &r_);
+//        return r_;
+//    }
+//
+//    template<typename U, std::enable_if_t<
+//        std::is_same_v<std::void_t<typename U::ix_t>, void>, bool> = true>
+//    constexpr decltype(auto) sqrt_helper(const U& v){
+//        return IXsqrt(v);
+//    }
+
     template<typename U, std::enable_if_t<std::is_same_v<U, double>, bool> = true>
     constexpr decltype(auto) sqrt_helper(const U& v){
         return std::sqrt(v);
     }
-    
-    template<typename U, std::enable_if_t<std::is_same_v<U, float>, bool> = true>
-    constexpr decltype(auto) sqrt_helper(const U& v){
-        return arm_sqrt_f32(v);
-    }
-    
+
     template<typename U, std::enable_if_t<
-        std::is_same_v<std::void_t<typename U::ix_t>, void>, bool> = true> 
+        std::is_same_v<std::void_t<typename U::ix_t>, void>, bool> = true>
     constexpr decltype(auto) sqrt_helper(const U& v){
         return IXsqrt(v);
     }
-    
+
+    template<>
+    constexpr decltype(auto) sqrt_helper<float>(const float& v){
+        float r_ = 0.f;
+        arm_sqrt_f32(v, &r_);
+        return r_;
+    }
+
+
+
   public:
-    
+
     constexpr decltype(auto) out_est(const T& xk){
         m_I.out_est(xk * xk);
         m_internalTime += TFBase<T>::m_Ts;
@@ -910,27 +933,27 @@ class RMS final: public TFBase<T>{
         TFBase<T>::reset();
     }
 };
-  
+
 //template <typename T> RMS(T, T, T, T) -> RMS<T>;
 
 
 template <typename T>
 class AVG{
     T yk;
-    
+
   public:
     constexpr AVG() : yk(0){}
-    
+
     constexpr decltype(auto) out_est(const T& xk){
         return yk = (xk + yk) / T(2.0);
     }
-    
+
     constexpr T& out_get(){
         return yk;
     }
-    
+
     constexpr void reset(){yk = T{0};}
-        
+
 };
 
 } //namespace TF
@@ -960,7 +983,7 @@ int test(){
     #if 0
     TF::PIreg<float> idReg;
     TF::PIreg idReg2 = TF::PIreg{0.001f, 1.f, 0.5f, 10.f, -10.f};
-    TF::PIreg<float> idReg3; 
+    TF::PIreg<float> idReg3;
     idReg3 = std::move(idReg2);
     idReg = std::move(idReg2);
     #endif
@@ -980,7 +1003,7 @@ int test(){
     diff4 = diff2;
     diff4 = std::move(diff3);
     #endif
-    
+
     #if 0
     TF::RMS<float> rms;
     TF::RMS rms2 = TF::RMS{0.001f, 1.f, 10.f, -10.f};
@@ -989,7 +1012,7 @@ int test(){
     rms4 = rms2;
     rms4 = std::move(rms3);
     #endif
-    
+
     return 1;
 }
 
